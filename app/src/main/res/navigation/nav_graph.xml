@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/heroesFragment">
+
+    <fragment
+        android:id="@+id/heroesFragment"
+        android:name="com.project_future_2021.marvelpedia.fragments.HeroesFragment"
+        android:label="heroes_fragment"
+        tools:layout="@layout/heroes_fragment">
+        <action
+            android:id="@+id/action_heroesFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.project_future_2021.marvelpedia.fragments.FavoritesFragment"
+        android:label="favorites_fragment"
+        tools:layout="@layout/favorites_fragment" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.project_future_2021.marvelpedia.fragments.SearchFragment"
+        android:label="search_fragment"
+        tools:layout="@layout/search_fragment" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.project_future_2021.marvelpedia.fragments.ProfileFragment"
+        android:label="profile_fragment"
+        tools:layout="@layout/profile_fragment" />
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.project_future_2021.marvelpedia.fragments.DetailsFragment"
+        android:label="details_fragment"
+        tools:layout="@layout/details_fragment">
+        <action
+            android:id="@+id/action_detailsFragment_to_heroesFragment"
+            app:popUpTo="@id/heroesFragment" />
+    </fragment>
+</navigation>
