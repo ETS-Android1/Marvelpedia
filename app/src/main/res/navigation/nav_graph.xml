@@ -12,7 +12,8 @@
         tools:layout="@layout/heroes_fragment">
         <action
             android:id="@+id/action_heroesFragment_to_detailsFragment"
-            app:destination="@id/detailsFragment" />
+            app:destination="@id/detailsFragment"
+            app:popUpTo="@id/heroesFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
@@ -33,9 +34,5 @@
         android:id="@+id/detailsFragment"
         android:name="com.project_future_2021.marvelpedia.fragments.DetailsFragment"
         android:label="details_fragment"
-        tools:layout="@layout/details_fragment">
-        <action
-            android:id="@+id/action_detailsFragment_to_heroesFragment"
-            app:popUpTo="@id/heroesFragment" />
-    </fragment>
+        tools:layout="@layout/details_fragment"/>
 </navigation>

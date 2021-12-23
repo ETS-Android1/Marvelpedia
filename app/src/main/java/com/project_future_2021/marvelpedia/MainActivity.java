@@ -1,7 +1,10 @@
 package com.project_future_2021.marvelpedia;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -22,8 +25,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+
         initBottomNavigation();
     }
+
 
     private void initBottomNavigation() {
         BottomNavigationView btm_nav_view = findViewById(R.id.main_btm_nav_view);
@@ -35,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.fragmentContainerView);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(btm_nav_view, navController);
-    }
 
+        btm_nav_view.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+            @Override
+            public void onNavigationItemReselected(@NonNull MenuItem item) {
+                Log.d("MainActivity", "onNavigationItemReselected: Nop");
+            }
+        });
+    }
 }
