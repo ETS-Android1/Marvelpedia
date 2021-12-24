@@ -14,6 +14,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+//action view, για να κανεις Share με Implicit Intent στα social media.
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.heroesFragment, R.id.favoritesFragment, R.id.searchFragment, R.id.profileFragment)
+                R.id.heroesFragment, R.id.favoritesFragment, R.id.searchFragment, R.id.profileFragment/*, R.id.detailsFragment*/)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.fragmentContainerView);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);

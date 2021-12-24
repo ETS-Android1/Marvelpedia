@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.project_future_2021.marvelpedia.R;
 import com.project_future_2021.marvelpedia.singletons.VolleySingleton;
 import com.project_future_2021.marvelpedia.viewmodels.HeroesViewModel;
@@ -27,7 +26,6 @@ public class HeroesFragment extends Fragment {
     private static final String TAG = "HeroesFragment";
     private static final String REQUEST_TAG = "HeroesFragmentRequest";
     private HeroesViewModel heroesViewModel;
-    JsonObjectRequest jsonObjectRequest;
 
     public static HeroesFragment newInstance() {
         return new HeroesFragment();
@@ -37,7 +35,9 @@ public class HeroesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        heroesViewModel = new ViewModelProvider(this).get(HeroesViewModel.class);
+        //"heroesViewModel" will attach(-live) to the getActivity()(i.e. MainActivity)'s lifecycle.
+        // So it will survive HeroesFragment destruction when navigating to other fragments.
+        heroesViewModel = new ViewModelProvider(/*this*/getActivity()).get(HeroesViewModel.class);
         return inflater.inflate(R.layout.heroes_fragment, container, false);
     }
 
@@ -54,30 +54,17 @@ public class HeroesFragment extends Fragment {
             }
         });
 
-        TextView heroes_txt = view.findViewById(R.id.heroes_txt);
-        heroesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                heroes_txt.setText(s);
-            }
-        });
-
-        String BASE_URL = getString(R.string.base_url);
         String request_type = "/v1/public/characters";
-        String PRIVATE_API_KEY = getString(R.string.private_API_key);
-        String PUBLIC_API_KEY = getString(R.string.public_API_key);
-        String Url = heroesViewModel.createUrlforApiCall(BASE_URL, request_type, PRIVATE_API_KEY, PUBLIC_API_KEY);
+        String Url = heroesViewModel.createUrlforApiCall(request_type);
 
         TextView test_textView = view.findViewById(R.id.test_textView);
-        heroesViewModel.getHeroes(requireContext(), Url, REQUEST_TAG);
-        heroesViewModel.getmList().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
+        heroesViewModel.getHeroesFromServer(Url, REQUEST_TAG);
+        heroesViewModel.getLiveDataHeroesList().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> heroesList) {
                 test_textView.setText(heroesList.toString());
             }
         });
-        //doCall(getContext(), Url);
-
 
         Log.d(TAG, "onViewCreated: mUrl is: " + Url);
 
@@ -87,11 +74,13 @@ public class HeroesFragment extends Fragment {
     // don't forget to cancel requests if the User can't see the response
     @Override
     public void onDestroyView() {
-        if (jsonObjectRequest != null) {
+        Log.d(TAG, "onDestroyView: ");
+        //if (jsonObjectRequest != null) {
+        if (VolleySingleton.getInstance(getContext()) != null) {
             VolleySingleton.getInstance(getContext()).getRequestQueue().cancelAll(REQUEST_TAG);
             Log.d(TAG, "onDestroyView: cancelled request with tag: " + REQUEST_TAG);
         }
-        Log.d(TAG, "onDestroyView: ");
+        //}
         super.onDestroyView();
     }
 
