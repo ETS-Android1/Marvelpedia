@@ -152,7 +152,7 @@ private Integer id;
 private String name;
 private String description;
 private String modified;
-private Thumbnail thumbnail;
+private Thumbnail image;
 private String resourceURI;
 private Comics comics;
 private Series series;
@@ -169,7 +169,7 @@ public Hero() {
 
 /**
 *
-* @param thumbnail
+* @param image
 * @param urls
 * @param stories
 * @param series
@@ -181,13 +181,13 @@ public Hero() {
 * @param resourceURI
 * @param events
 */
-public Hero(Integer id, String name, String description, String modified, Thumbnail thumbnail, String resourceURI, Comics comics, Series series, Stories stories, Events events, List<Url> urls) {
+public Hero(Integer id, String name, String description, String modified, Thumbnail image, String resourceURI, Comics comics, Series series, Stories stories, Events events, List<Url> urls) {
 super();
 this.id = id;
 this.name = name;
 this.description = description;
 this.modified = modified;
-this.thumbnail = thumbnail;
+this.image = image;
 this.resourceURI = resourceURI;
 this.comics = comics;
 this.series = series;
@@ -229,11 +229,11 @@ this.modified = modified;
 }
 
 public Thumbnail getThumbnail() {
-return thumbnail;
+return image;
 }
 
-public void setThumbnail(Thumbnail thumbnail) {
-this.thumbnail = thumbnail;
+public void setThumbnail(Thumbnail image) {
+this.image = image;
 }
 
 public String getResourceURI() {
@@ -425,7 +425,7 @@ this.returned = returned;
 }
 
 }
------------------------------------com.project_future_2021.marvelpedia.data.Thumbnail.java-----------------------------------
+-----------------------------------com.project_future_2021.marvelpedia.data.Image.java-----------------------------------
 
 package com.project_future_2021.marvelpedia.data;
 

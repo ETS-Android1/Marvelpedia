@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".fragments.HeroesFragment">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/heroes_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/holder_list_item" />
+
     <TextView
         android:id="@+id/heroes_txt"
         android:layout_width="wrap_content"
@@ -23,26 +35,14 @@
         android:text="Show me details"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/button_load_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Load Image"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="#F57C00"
-        app:layout_constraintBottom_toTopOf="@+id/heroes_txt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-
-        <TextView
-            android:id="@+id/test_textView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="TextView"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
-
-    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

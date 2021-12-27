@@ -5,7 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,11 +14,15 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.project_future_2021.marvelpedia.R;
+import com.project_future_2021.marvelpedia.data.Hero;
+import com.project_future_2021.marvelpedia.recycler_view.MyAdapter;
 import com.project_future_2021.marvelpedia.singletons.VolleySingleton;
 import com.project_future_2021.marvelpedia.viewmodels.HeroesViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HeroesFragment extends Fragment {
@@ -26,6 +30,7 @@ public class HeroesFragment extends Fragment {
     private static final String TAG = "HeroesFragment";
     private static final String REQUEST_TAG = "HeroesFragmentRequest";
     private HeroesViewModel heroesViewModel;
+    private MyAdapter heroesAdapter;
 
     public static HeroesFragment newInstance() {
         return new HeroesFragment();
@@ -37,7 +42,7 @@ public class HeroesFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         //"heroesViewModel" will attach(-live) to the getActivity()(i.e. MainActivity)'s lifecycle.
         // So it will survive HeroesFragment destruction when navigating to other fragments.
-        heroesViewModel = new ViewModelProvider(/*this*/getActivity()).get(HeroesViewModel.class);
+        heroesViewModel = new ViewModelProvider(/*this*/requireActivity()).get(HeroesViewModel.class);
         return inflater.inflate(R.layout.heroes_fragment, container, false);
     }
 
@@ -57,16 +62,50 @@ public class HeroesFragment extends Fragment {
         String request_type = "/v1/public/characters";
         String Url = heroesViewModel.createUrlforApiCall(request_type);
 
-        TextView test_textView = view.findViewById(R.id.test_textView);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+
         heroesViewModel.getHeroesFromServer(Url, REQUEST_TAG);
-        heroesViewModel.getLiveDataHeroesList().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
+
+        /* option 1:
+        // start of option 1
+        heroesViewModel.getLiveDataHeroesList().observe(getViewLifecycleOwner(), new Observer<List<Hero>>() {
             @Override
-            public void onChanged(List<String> heroesList) {
-                test_textView.setText(heroesList.toString());
+            public void onChanged(List<Hero> heroesList) {
+                heroesAdapter = new MyAdapter(heroesList, new MyAdapter.onItemClickListener() {
+                    @Override
+                    public void onClick(View v, Hero data) {
+                        Toast.makeText(getContext(), "hi", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                recyclerView.setAdapter(heroesAdapter);
+            }
+        });
+        // end of option 1
+        */
+
+        /* option 2:
+        // start of option 2
+        */
+        heroesAdapter = new MyAdapter(new ArrayList<>(), new MyAdapter.onItemClickListener() {
+            @Override
+            public void onClick(View v, Hero data) {
+                Toast.makeText(getContext(), "pressed on hero: " + data.getName(), Toast.LENGTH_SHORT).show();
             }
         });
 
-        Log.d(TAG, "onViewCreated: mUrl is: " + Url);
+        //recyclerView.setAdapter(heroesAdapter);
+
+        heroesViewModel.getLiveDataHeroesList().observe(getViewLifecycleOwner(), new Observer<List<Hero>>() {
+            @Override
+            public void onChanged(List<Hero> heroesList) {
+                //recyclerView.setAdapter(heroesAdapter);
+                heroesAdapter.updateList(heroesList);
+                recyclerView.setAdapter(heroesAdapter);
+            }
+        });
+        /*
+        // end of option 2
+        */
 
     }
 
