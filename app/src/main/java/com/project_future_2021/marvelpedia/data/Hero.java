@@ -57,6 +57,8 @@ public class Hero {
     //A set of public web site URLs for the resource.
     private List<Url> urls;
 
+    private Boolean isFavorite = false;
+
     /**
      * No args constructor for use in serialization
      */
@@ -88,6 +90,30 @@ public class Hero {
         this.stories = stories;
         this.events = events;
         this.urls = urls;
+    }
+
+    public Hero(Integer id, String name, String description, String modified, Image thumbnail, String resourceURI, Comics comics, Series series, Stories stories, Events events, List<Url> urls, Boolean isFavorite) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.modified = modified;
+        this.thumbnail = thumbnail;
+        this.resourceURI = resourceURI;
+        this.comics = comics;
+        this.series = series;
+        this.stories = stories;
+        this.events = events;
+        this.urls = urls;
+        this.isFavorite = isFavorite;
+    }
+
+    public Hero(Integer id, String name, String description, String modified, Image thumbnail, Boolean isFavorite) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.modified = modified;
+        this.thumbnail = thumbnail;
+        this.isFavorite = isFavorite;
     }
 
     public Integer getId() {
@@ -178,6 +204,14 @@ public class Hero {
         this.urls = urls;
     }
 
+    public Boolean getFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        isFavorite = favorite;
+    }
+
     @Override
     public String toString() {
         return "Hero{" +
@@ -185,13 +219,14 @@ public class Hero {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", modified='" + modified + '\'' +
-                ", image=" + thumbnail +
+                ", thumbnail=" + thumbnail +
                 ", resourceURI='" + resourceURI + '\'' +
                 ", comics=" + comics +
                 ", series=" + series +
                 ", stories=" + stories +
                 ", events=" + events +
                 ", urls=" + urls +
+                ", isFavorite=" + isFavorite +
                 '}';
     }
 }

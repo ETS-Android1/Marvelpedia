@@ -44,13 +44,16 @@ public class HeroesViewModel extends AndroidViewModel {
 
     private final List<Hero> heroesList = new ArrayList<>();
     private final MutableLiveData<List<Hero>> liveDataHeroesList;
-    //public String temp_image_link;
+
+    // TODO: should change where its value changes, probably...
+    public MutableLiveData<Boolean> isLoading;
 
     public HeroesViewModel(@NonNull Application application /*,Repository repository*/) {
         super(application);
         Log.d(TAG, "HeroesViewModel: constructor");
 
         liveDataHeroesList = new MutableLiveData<>();
+        isLoading = new MutableLiveData<>();
     }
 
     public MutableLiveData<List<Hero>> getLiveDataHeroesList() {
@@ -58,6 +61,7 @@ public class HeroesViewModel extends AndroidViewModel {
     }
 
     public void getHeroesFromServer(String url, String requestTag) {
+        isLoading.setValue(true);
         Gson gson = new Gson();
 
         // TODO:
@@ -77,11 +81,6 @@ public class HeroesViewModel extends AndroidViewModel {
                         try {
                             results = response.getJSONObject("data").getJSONArray("results");
                             resultSize = response.getJSONObject("data").getInt("count");
-                            Image nImage = gson.fromJson(String.valueOf(results.getJSONObject(0).getJSONObject("thumbnail")), Image.class);
-                            Items nItems = gson.fromJson(String.valueOf(results.getJSONObject(0).getJSONObject("comics").getJSONArray("items").getJSONObject(0)), Items.class);
-                            Comics nComics = gson.fromJson(String.valueOf(results.getJSONObject(0).getJSONObject("comics")), Comics.class);
-                            Comics nnComics = gson.fromJson(String.valueOf(results.getJSONObject(0).getJSONObject("comics")), Comics.class);
-                            System.out.println();
 
                             Hero temp_hero;
                             Image temp_hero_thumbnail;
@@ -98,18 +97,12 @@ public class HeroesViewModel extends AndroidViewModel {
                             List<Url> temp_hero_urls = null;
 
                             for (int i = 0; i < resultSize; i++) {
-                                /*heroesList.add(results.getJSONObject(i).getString("name"));
-                                heroesList.add("\n");*/
-
                                 temp_hero_id = results.getJSONObject(i).getInt("id");
                                 temp_hero_name = results.getJSONObject(i).getString("name");
                                 temp_hero_description = results.getJSONObject(i).getString("description");
                                 temp_hero_modified = results.getJSONObject(i).getString("modified");
-
                                 temp_hero_thumbnail = gson.fromJson(results.getJSONObject(i).getString("thumbnail"), Image.class);
-
                                 temp_hero_resourceURI = results.getJSONObject(i).getString("resourceURI");
-
                                 temp_hero_comics = gson.fromJson(results.getJSONObject(i).getString("comics"), Comics.class);
                                 temp_hero_series = gson.fromJson(results.getJSONObject(i).getString("series"), Series.class);
                                 temp_hero_stories = gson.fromJson(results.getJSONObject(i).getString("stories"), Stories.class);
@@ -117,10 +110,12 @@ public class HeroesViewModel extends AndroidViewModel {
                                 //temp_hero_urls = gson.fromJson(results.getJSONObject(i).getString("urls"), Url.class);
 
                                 temp_hero = new Hero(temp_hero_id, temp_hero_name, temp_hero_description, temp_hero_modified, temp_hero_thumbnail, temp_hero_resourceURI, temp_hero_comics, temp_hero_series, temp_hero_stories, temp_hero_events, null);
-                                Log.d(TAG, "onResponse: just fetched hero: " + temp_hero);
                                 heroesList.add(temp_hero);
+
+                                Log.d(TAG, "onResponse: just fetched and added hero: " + temp_hero_name + " on my list.");
                             }
                             liveDataHeroesList.setValue(heroesList);
+                            isLoading.setValue(false);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -131,6 +126,9 @@ public class HeroesViewModel extends AndroidViewModel {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // Handle error
+                        // TODO: comment or uncomment next line,
+                        //  we should decide if the user should or should not see the progress bar constantly loading.
+                        //isLoading.setValue(false);
                         Toast.makeText(getApplication().getBaseContext(), "Something went wrong " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });

@@ -107,6 +107,20 @@ public class HeroesFragment extends Fragment {
         // end of option 2
         */
 
+        // subscribe to and observe to changes happening in the livedata variable named isLoading
+        // and, if true, show the progress bar, otherwise hide it.
+        heroesViewModel.isLoading.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isLoading) {
+                if (isLoading){
+                    view.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+                }
+                else{
+                    view.findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
     }
 
 

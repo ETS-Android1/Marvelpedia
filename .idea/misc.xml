@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/drawable/ic_favorites.xml" value="0.2064814814814815" />
         <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.3828125" />
+        <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/drawable/ic_yes_favorite.xml" value="0.2064814814814815" />
         <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/activity_login.xml" value="0.3482789855072464" />
         <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/activity_main.xml" value="0.322463768115942" />
         <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/activity_main2.xml" value="0.36666666666666664" />
@@ -11,8 +13,8 @@
         <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/favorites_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/fragment_dashboard.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/fragment_notifications.xml" value="0.20520833333333333" />
-        <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/heroes_fragment.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/holder_list_item.xml" value="0.34215500945179583" />
+        <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/heroes_fragment.xml" value="0.25" />
+        <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/holder_list_item.xml" value="0.33" />
         <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/profile_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/search_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/menu/bottom_menu.xml" value="0.36666666666666664" />

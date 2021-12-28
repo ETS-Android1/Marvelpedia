@@ -17,6 +17,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 //action view, για να κανεις Share με Implicit Intent στα social media.
 public class MainActivity extends AppCompatActivity {
 
+    public static final String TAG = "MainActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +47,21 @@ public class MainActivity extends AppCompatActivity {
         btm_nav_view.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
             @Override
             public void onNavigationItemReselected(@NonNull MenuItem item) {
-                Log.d("MainActivity", "onNavigationItemReselected: Nop");
+                // Actually just do nothing. (did not forget to write some code/logic here)
+                Log.d(TAG, "onNavigationItemReselected: Nop");
             }
         });
+    }
+
+    // to handle what happens when the user presses the back 'arrow' of the toolbar/actionbar
+    /*Attempts to navigate up in the navigation hierarchy.
+    Suitable for when the user presses the "Up" button
+    marked with a left (or start)-facing arrow in the upper left (or starting) corner of the app UI.*/
+    @Override
+    public boolean onSupportNavigateUp() {
+        Log.d(TAG, "onSupportNavigateUp: ");
+        NavController navController = Navigation.findNavController(this, R.id.fragmentContainerView);
+        // navigateUp OR if that fails, call the super()
+        return navController.navigateUp() || super.onNavigateUp();
     }
 }
