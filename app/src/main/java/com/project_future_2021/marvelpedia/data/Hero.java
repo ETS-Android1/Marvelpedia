@@ -1,6 +1,7 @@
 package com.project_future_2021.marvelpedia.data;
 
 import java.util.List;
+import java.util.Objects;
 
 /*
 *
@@ -228,5 +229,18 @@ public class Hero {
                 ", urls=" + urls +
                 ", isFavorite=" + isFavorite +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Hero hero = (Hero) o;
+        return id.equals(hero.id) && name.equals(hero.name) && modified.equals(hero.modified);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, modified, thumbnail, resourceURI, comics, series, stories, events, urls, isFavorite);
     }
 }
