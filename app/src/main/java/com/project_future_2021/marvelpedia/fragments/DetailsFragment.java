@@ -10,10 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.project_future_2021.marvelpedia.R;
+import com.project_future_2021.marvelpedia.data.Hero;
 import com.project_future_2021.marvelpedia.viewmodels.DetailsViewModel;
 
 public class DetailsFragment extends Fragment {
@@ -38,12 +38,20 @@ public class DetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         TextView details_txt = view.findViewById(R.id.details_txt);
-        detailsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+
+        DetailsFragmentArgs argsFromHeroesFragment = DetailsFragmentArgs.fromBundle(getArguments());
+        Hero heroToShowDetailsFor = argsFromHeroesFragment.getHeroForDetailsFragment();
+        String info_text = "You pressed on Hero: " + heroToShowDetailsFor.getName() + "\n" +
+                "with description: " + heroToShowDetailsFor.getDescription() + "\n" +
+                "Are they favorite? " + heroToShowDetailsFor.getFavorite();
+        details_txt.setText(info_text);
+
+        /*detailsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 details_txt.setText(s);
             }
-        });
+        });*/
 
         //make the bottom navigation bar invisible
         requireActivity().findViewById(R.id.main_btm_nav_view).setVisibility(View.GONE);

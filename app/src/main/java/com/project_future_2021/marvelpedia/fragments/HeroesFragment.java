@@ -63,7 +63,7 @@ public class HeroesFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // goto Details (following instructions specified in nav_graph.xml
-                NavDirections action = HeroesFragmentDirections.actionHeroesFragmentToDetailsFragment();
+                NavDirections action = HeroesFragmentDirections.actionHeroesFragmentToDetailsFragment(new Hero());
                 Navigation.findNavController(view).navigate(action);
             }
         });
@@ -109,6 +109,10 @@ public class HeroesFragment extends Fragment {
             @Override
             public void onClick(View v, Hero data) {
                 Toast.makeText(getContext(), "O " + data.getName() + "favorite = " + data.getFavorite(), Toast.LENGTH_SHORT).show();
+                // goto Details (following instructions specified in nav_graph.xml
+                NavDirections action = HeroesFragmentDirections.actionHeroesFragmentToDetailsFragment(data);
+                Navigation.findNavController(view).navigate(action);
+                Log.d(TAG, "onClick: Navigating to DetailsFragment with Hero pressed: " + data.getName());
             }
         });
         // That should -THEORETICALLY- scroll to the last position of the RecyclerView, but...
