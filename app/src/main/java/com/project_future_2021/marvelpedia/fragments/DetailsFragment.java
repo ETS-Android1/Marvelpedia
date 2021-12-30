@@ -46,13 +46,13 @@ public class DetailsFragment extends Fragment {
         });
 
         //make the bottom navigation bar invisible
-        getActivity().findViewById(R.id.main_btm_nav_view).setVisibility(View.GONE);
+        requireActivity().findViewById(R.id.main_btm_nav_view).setVisibility(View.GONE);
     }
 
     @Override
     public void onDestroyView() {
         //make the bottom navigation bar visible again
-        getActivity().findViewById(R.id.main_btm_nav_view).setVisibility(View.VISIBLE);
+        requireActivity().findViewById(R.id.main_btm_nav_view).setVisibility(View.VISIBLE);
         Log.d(TAG, "onDestroyView: ");
         super.onDestroyView();
     }
