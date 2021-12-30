@@ -35,5 +35,9 @@
         android:id="@+id/detailsFragment"
         android:name="com.project_future_2021.marvelpedia.fragments.DetailsFragment"
         android:label="Details"
-        tools:layout="@layout/details_fragment" />
+        tools:layout="@layout/details_fragment">
+        <argument
+            android:name="heroForDetailsFragment"
+            app:argType="com.project_future_2021.marvelpedia.data.Hero" />
+    </fragment>
 </navigation>

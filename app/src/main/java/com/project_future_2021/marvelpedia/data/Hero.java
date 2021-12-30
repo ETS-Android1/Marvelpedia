@@ -1,5 +1,8 @@
 package com.project_future_2021.marvelpedia.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -20,7 +23,7 @@ events	ResourceList	A resource list of events in which this character appears.
 series	ResourceList	A resource list of series in which this character appears.
 *
 * */
-public class Hero {
+public class Hero implements Parcelable {
 
     //The unique ID of the character resource.
     private Integer id;
@@ -116,6 +119,32 @@ public class Hero {
         this.thumbnail = thumbnail;
         this.isFavorite = isFavorite;
     }
+
+    protected Hero(Parcel in) {
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readInt();
+        }
+        name = in.readString();
+        description = in.readString();
+        modified = in.readString();
+        resourceURI = in.readString();
+        byte tmpIsFavorite = in.readByte();
+        isFavorite = tmpIsFavorite == 0 ? null : tmpIsFavorite == 1;
+    }
+
+    public static final Creator<Hero> CREATOR = new Creator<Hero>() {
+        @Override
+        public Hero createFromParcel(Parcel in) {
+            return new Hero(in);
+        }
+
+        @Override
+        public Hero[] newArray(int size) {
+            return new Hero[size];
+        }
+    };
 
     public Integer getId() {
         return id;
@@ -242,5 +271,25 @@ public class Hero {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, description, modified, thumbnail, resourceURI, comics, series, stories, events, urls, isFavorite);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
+        }
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeString(modified);
+        dest.writeString(resourceURI);
+        dest.writeByte((byte) (isFavorite == null ? 0 : isFavorite ? 1 : 2));
     }
 }
