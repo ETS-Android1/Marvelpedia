@@ -7,12 +7,14 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.project_future_2021.marvelpedia.viewmodels.LoginViewModel;
 
 //action view, για να κανεις Share με Implicit Intent στα social media.
 public class MainActivity extends AppCompatActivity {
@@ -30,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
 
         initBottomNavigation();
+
+        setContentView(R.layout.login_fragment);
+        LoginViewModel viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
     }
 
 
