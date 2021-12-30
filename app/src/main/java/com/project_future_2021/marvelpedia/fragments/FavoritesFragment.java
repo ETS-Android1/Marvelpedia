@@ -11,12 +11,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.project_future_2021.marvelpedia.R;
 import com.project_future_2021.marvelpedia.data.Hero;
+import com.project_future_2021.marvelpedia.recycler_view.TestListAdapter;
 import com.project_future_2021.marvelpedia.viewmodels.FavoritesViewModel;
 import com.project_future_2021.marvelpedia.viewmodels.HeroesViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FavoritesFragment extends Fragment {
@@ -24,6 +27,7 @@ public class FavoritesFragment extends Fragment {
     private static final String TAG = "FavoritesFragment";
     private FavoritesViewModel favoritesViewModel;
     private HeroesViewModel secondHeroesViewModel;
+    private RecyclerView favoritesRecyclerView;
 
     public static FavoritesFragment newInstance() {
         return new FavoritesFragment();
@@ -43,6 +47,16 @@ public class FavoritesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         TextView favorites_txt = view.findViewById(R.id.favorites_txt);
+
+        favoritesRecyclerView = view.findViewById(R.id.favorites_recycler_view);
+        TestListAdapter favoritesAdapter = new TestListAdapter(new ArrayList<>(), new TestListAdapter.myTestClickListener() {
+            @Override
+            public void onClick(View v, Hero data) {
+                // What happens when users click on items-heroes.
+            }
+        });
+        favoritesRecyclerView.setAdapter(favoritesAdapter);
+
         /*favoritesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
@@ -52,6 +66,7 @@ public class FavoritesFragment extends Fragment {
         secondHeroesViewModel.getLiveDataHeroesList().observe(getViewLifecycleOwner(), new Observer<List<Hero>>() {
             @Override
             public void onChanged(List<Hero> heroes) {
+                // What happens when changes in the list occur.
                 String s = "";
                 for (Hero hero : heroes
                 ) {
