@@ -4,12 +4,14 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.project_future_2021.marvelpedia.viewmodels.LoginViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         initBottomNavigation();
+
+        setContentView(R.layout.login_fragment);
+        LoginViewModel viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
     }
 
     private void initBottomNavigation() {
