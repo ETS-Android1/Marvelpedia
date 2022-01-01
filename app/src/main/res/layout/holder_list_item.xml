@@ -15,7 +15,7 @@
         app:layout_constraintGuide_percent="0.35" />
 
     <ImageView
-        android:id="@+id/holder_list_hero_thumbnail"
+        android:id="@+id/sharedImageViewHeroThumbnail"
         android:layout_width="0dp"
         android:layout_height="225dp"
         android:rotation="0"
@@ -27,7 +27,7 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/holder_list_hero_name"
+        android:id="@+id/sharedTextViewHeroName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -37,14 +37,14 @@
         android:text="hero_name"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/holder_list_hero_description"
+        app:layout_constraintBottom_toTopOf="@+id/sharedTextViewHeroDescription"
         app:layout_constraintEnd_toStartOf="@+id/holder_list_hero_favorite"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread_inside" />
 
     <TextView
-        android:id="@+id/holder_list_hero_description"
+        android:id="@+id/sharedTextViewHeroDescription"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
@@ -58,7 +58,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/holder_list_hero_favorite"
         app:layout_constraintStart_toEndOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/holder_list_hero_name" />
+        app:layout_constraintTop_toBottomOf="@+id/sharedTextViewHeroName" />
 
     <ImageView
         android:id="@+id/holder_list_hero_favorite"

@@ -48,11 +48,10 @@ public class HeroesViewModel extends AndroidViewModel {
     private final MutableLiveData<List<Hero>> liveDataHeroesList;
 
     public int mOffset = 0;
-    // limit AND starting offset..
-    private int mLimit = 30;
-
     // TODO: should change where its value changes, probably...
     public MutableLiveData<Boolean> isLoading;
+    // limit AND starting offset..
+    private int mLimit = 30;
 
     public HeroesViewModel(@NonNull Application application /*,Repository repository*/) {
         super(application);
@@ -117,9 +116,19 @@ public class HeroesViewModel extends AndroidViewModel {
                             for (int i = 0; i < resultSize; i++) {
                                 temp_hero_id = results.getJSONObject(i).getInt("id");
                                 temp_hero_name = results.getJSONObject(i).getString("name");
+
                                 temp_hero_description = results.getJSONObject(i).getString("description");
+                                if (temp_hero_description.isEmpty()) {
+                                    temp_hero_description = "This hero has no description yet. \nWe will add one later :)";
+                                }
+
                                 temp_hero_modified = results.getJSONObject(i).getString("modified");
+
                                 temp_hero_thumbnail = gson.fromJson(results.getJSONObject(i).getString("thumbnail"), Image.class);
+                                /*if (temp_hero_thumbnail.getPath().endsWith("image_not_available")) {
+                                    temp_hero_thumbnail.setPath("");
+                                }*/
+
                                 temp_hero_resourceURI = results.getJSONObject(i).getString("resourceURI");
                                 temp_hero_comics = gson.fromJson(results.getJSONObject(i).getString("comics"), Comics.class);
                                 temp_hero_series = gson.fromJson(results.getJSONObject(i).getString("series"), Series.class);
@@ -135,6 +144,7 @@ public class HeroesViewModel extends AndroidViewModel {
                                 temp_hero = new Hero(temp_hero_id, temp_hero_name, temp_hero_description, temp_hero_modified, temp_hero_thumbnail, temp_hero_resourceURI, temp_hero_comics, temp_hero_series, temp_hero_stories, temp_hero_events, temp_hero_urls);
 
                                 // TODO: subject to change, will see.
+                                // Do not re-add items already on the list.
                                 if (heroesList.contains(temp_hero)) {
                                     isLoading.setValue(false);
                                     Log.d(TAG, "onResponse: Did not fetch heroes again, no need.");
@@ -142,7 +152,7 @@ public class HeroesViewModel extends AndroidViewModel {
                                 }
                                 heroesList.add(temp_hero);
 
-                                Log.d(TAG, "onResponse: just fetched and added hero: " + temp_hero_name + " on my list.");
+                                Log.d(TAG, "onResponse: just fetched and added hero: " + temp_hero_name + " with Image link: " + temp_hero_thumbnail);
                             }
                             liveDataHeroesList.postValue(heroesList);
                             isLoading.setValue(false);

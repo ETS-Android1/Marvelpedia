@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.transition.MaterialFadeThrough;
 import com.project_future_2021.marvelpedia.R;
 import com.project_future_2021.marvelpedia.viewmodels.ProfileViewModel;
 
@@ -30,6 +31,13 @@ public class ProfileFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         return inflater.inflate(R.layout.profile_fragment, container, false);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        MaterialFadeThrough exitTransition = new MaterialFadeThrough();
     }
 
     @Override

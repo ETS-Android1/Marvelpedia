@@ -6,7 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,11 +17,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.FragmentNavigator;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project_future_2021.marvelpedia.R;
 import com.project_future_2021.marvelpedia.data.Hero;
-import com.project_future_2021.marvelpedia.recycler_view.TestListAdapter;
+import com.project_future_2021.marvelpedia.recycler_view.MyListAdapter;
 import com.project_future_2021.marvelpedia.singletons.VolleySingleton;
 import com.project_future_2021.marvelpedia.viewmodels.HeroesViewModel;
 
@@ -33,7 +34,7 @@ public class HeroesFragment extends Fragment {
     private static final String TAG = "HeroesFragment";
     private static final String REQUEST_TAG = "HeroesFragmentRequest";
     private HeroesViewModel heroesViewModel;
-    private TestListAdapter heroesAdapter;
+    private MyListAdapter heroesAdapter;
     private RecyclerView recyclerView;
 
     public static HeroesFragment newInstance() {
@@ -51,22 +52,37 @@ public class HeroesFragment extends Fragment {
         return inflater.inflate(R.layout.heroes_fragment, container, false);
     }
 
+    //https://material.io/develop/android/theming/motion
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        /*Transition animation = TransitionInflater.from(requireContext()).inflateTransition(
+                android.R.transition.move
+        );
+        setSharedElementEnterTransition(animation);
+        setSharedElementReturnTransition(animation);*/
+
+        /*Explode explode = new Explode();
+        requireActivity().getWindow().setExitTransition(explode);*/
+        /*setSharedElementReturnTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.change_image));
+        setExitTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.explode));*/
+
+        //MaterialFadeThrough exitTransition = new MaterialFadeThrough();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Part 1 of 2.
+        /* This is needed, if we want the layout to draw itself only after we are done (e.g. have returned from the DetailsFragment via shared views and transitions.*/
+        postponeEnterTransition();
+        final ViewGroup parentView = (ViewGroup) view.getParent();
+
         Log.d(TAG, "onViewCreated: ");
 
-        // when the user taps on the button, go to the DetailsFragment
-        view.findViewById(R.id.heroes_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // goto Details (following instructions specified in nav_graph.xml
-                NavDirections action = HeroesFragmentDirections.actionHeroesFragmentToDetailsFragment(new Hero());
-                Navigation.findNavController(view).navigate(action);
-            }
-        });
 
         String request_type = "/v1/public/characters";
         String Url = heroesViewModel.createUrlForApiCall(request_type);
@@ -105,14 +121,34 @@ public class HeroesFragment extends Fragment {
         /* option 2:
         // start of option 2
         */
-        heroesAdapter = new TestListAdapter(new ArrayList<>(), new TestListAdapter.myTestClickListener() {
+        heroesAdapter = new MyListAdapter(new ArrayList<>(), new MyListAdapter.MyClickListener() {
             @Override
             public void onClick(View v, Hero data) {
-                Toast.makeText(getContext(), "O " + data.getName() + "favorite = " + data.getFavorite(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "O " + data.getName() + "favorite = " + data.getFavorite(), Toast.LENGTH_SHORT).show();
                 // goto Details (following instructions specified in nav_graph.xml
                 NavDirections action = HeroesFragmentDirections.actionHeroesFragmentToDetailsFragment(data);
-                Navigation.findNavController(view).navigate(action);
+
+                FragmentNavigator.Extras.Builder extrasBuilder = new FragmentNavigator.Extras.Builder();
+
+                extrasBuilder.addSharedElement(v.findViewById(R.id.sharedTextViewHeroName), "nameTN");
+                extrasBuilder.addSharedElement(v.findViewById(R.id.sharedTextViewHeroDescription), "descriptionTN");
+                extrasBuilder.addSharedElement(v.findViewById(R.id.sharedImageViewHeroThumbnail), "thumbnailTN");
+
+                //Navigation.findNavController(view).navigate(action.getActionId(), action.getArguments(), null, extras);
+                Navigation.findNavController(view).navigate(action, extrasBuilder.build());
                 Log.d(TAG, "onClick: Navigating to DetailsFragment with Hero pressed: " + data.getName());
+
+                /*
+                cardView.setOnClickListener{
+                        val extras = FragmentNavigatorExtras(imageView to "imageView")
+                        findNavController().navigate(R.id.detailAction, null, null, extras)
+                    }
+
+                    override fun onCreate(savedInstanceState: Bundle?) {
+                            super.onCreate(savedInstanceState)
+                               sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+                    }
+                    */
             }
         });
         // That should -THEORETICALLY- scroll to the last position of the RecyclerView, but...
@@ -120,6 +156,7 @@ public class HeroesFragment extends Fragment {
         //recyclerView.setAdapter(heroesAdapter);
 
 
+        //recyclerView.setAdapter(heroesAdapter);
         // TODO: probably wrong, but why does it not work as it should??
         // If we put "recyclerView.setAdapter(heroesAdapter);" only before or after the "observe the list code",
         // the list doesn't show when it's recreated (the user swapped fragments etc)
@@ -129,6 +166,23 @@ public class HeroesFragment extends Fragment {
             public void onChanged(List<Hero> heroesList) {
                 heroesAdapter.submitList(heroesList);
                 recyclerView.setAdapter(heroesAdapter);
+
+                // Part 2 of 2.
+                /* This is needed, if we want the layout to draw itself after we are done*/
+                // Start the transition once all views have been
+                // measured and laid out
+                parentView.getViewTreeObserver()
+                        .addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                            @Override
+                            public boolean onPreDraw() {
+                                parentView.getViewTreeObserver()
+                                        .removeOnPreDrawListener(this);
+                                startPostponedEnterTransition();
+                                return true;
+                            }
+                        });
+                //TODO: go here https://stackoverflow.com/questions/53614436/how-to-implement-shared-transition-element-from-recyclerview-item-to-fragment-wi
+                //runLayoutAnimation(recyclerView);
                 Log.d(TAG, "onChanged: new heroesList is:" + heroesList);
                 for (Hero hero : heroesList) {
                     Log.d(TAG, "onChanged: Hero " + hero.getName() + " is favorite? " + hero.getFavorite());
@@ -145,9 +199,9 @@ public class HeroesFragment extends Fragment {
             @Override
             public void onChanged(Boolean isLoading) {
                 if (isLoading) {
-                    view.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.progressBarTop).setVisibility(View.VISIBLE);
                 } else {
-                    view.findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
+                    view.findViewById(R.id.progressBarTop).setVisibility(View.INVISIBLE);
                 }
             }
         });

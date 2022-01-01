@@ -30,9 +30,6 @@ public class MainActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
 
         initBottomNavigation();
-
-        /*setContentView(R.layout.login_fragment);
-        LoginViewModel viewModel = new ViewModelProvider(this).get(LoginViewModel.class);*/
     }
 
 
@@ -41,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.heroesFragment, R.id.favoritesFragment, R.id.searchFragment, R.id.profileFragment/*, R.id.detailsFragment*/)
+                R.id.heroesFragment, R.id.favoritesFragment, R.id.searchFragment, R.id.profileFragment/*, R.id.loginFragment*//*, R.id.detailsFragment*/)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.fragmentContainerView);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);

@@ -33,6 +33,13 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         LoginViewModel viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        view.findViewById(R.id.login_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                NavDirections actionGoToHeroesFragment = LoginFragmentDirections.actionLoginFragmentToHeroesFragment();
+//                Navigation.findNavController(view).navigate(actionGoToHeroesFragment);
+            }
+        });
 
 
     }

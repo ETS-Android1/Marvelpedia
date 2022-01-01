@@ -13,9 +13,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.transition.MaterialFadeThrough;
 import com.project_future_2021.marvelpedia.R;
 import com.project_future_2021.marvelpedia.data.Hero;
-import com.project_future_2021.marvelpedia.recycler_view.TestListAdapter;
+import com.project_future_2021.marvelpedia.recycler_view.MyListAdapter;
 import com.project_future_2021.marvelpedia.viewmodels.FavoritesViewModel;
 import com.project_future_2021.marvelpedia.viewmodels.HeroesViewModel;
 
@@ -43,13 +44,20 @@ public class FavoritesFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        MaterialFadeThrough enterTransition = new MaterialFadeThrough();
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         TextView favorites_txt = view.findViewById(R.id.favorites_txt);
 
         favoritesRecyclerView = view.findViewById(R.id.favorites_recycler_view);
-        TestListAdapter favoritesAdapter = new TestListAdapter(new ArrayList<>(), new TestListAdapter.myTestClickListener() {
+        MyListAdapter favoritesAdapter = new MyListAdapter(new ArrayList<>(), new MyListAdapter.MyClickListener() {
             @Override
             public void onClick(View v, Hero data) {
                 // What happens when users click on items-heroes.
