@@ -3,6 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/ml09/StudioProjects/Marvelpedia/app/src/main/res/drawable/circle.xml" value="0.2703125" />
+        <entry key="..\:/Users/ml09/StudioProjects/Marvelpedia/app/src/main/res/drawable/circle_border.xml" value="0.2703125" />
+        <entry key="..\:/Users/ml09/StudioProjects/Marvelpedia/app/src/main/res/drawable/grad.xml" value="0.2703125" />
+        <entry key="..\:/Users/ml09/StudioProjects/Marvelpedia/app/src/main/res/drawable/ic_heroes.xml" value="0.2703125" />
+        <entry key="..\:/Users/ml09/StudioProjects/Marvelpedia/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2703125" />
+        <entry key="..\:/Users/ml09/StudioProjects/Marvelpedia/app/src/main/res/drawable/ic_profile.xml" value="0.2703125" />
+        <entry key="..\:/Users/ml09/StudioProjects/Marvelpedia/app/src/main/res/layout/activity_login.xml" value="0.1956521739130435" />
+        <entry key="..\:/Users/ml09/StudioProjects/Marvelpedia/app/src/main/res/layout/activity_main.xml" value="0.1956521739130435" />
+        <entry key="..\:/Users/ml09/StudioProjects/Marvelpedia/app/src/main/res/layout/heroes_fragment.xml" value="0.2105978260869565" />
+        <entry key="..\:/Users/ml09/StudioProjects/Marvelpedia/app/src/main/res/layout/profile_fragment.xml" value="0.2" />
         <entry key="..\:/Users/nikos/StudioProjects/Marvelpedia/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.21203703703703702" />
         <entry key="..\:/Users/nikos/StudioProjects/Marvelpedia/app/src/main/res/drawable/ic_favorites.xml" value="0.21203703703703702" />
         <entry key="..\:/Users/nikos/StudioProjects/Marvelpedia/app/src/main/res/drawable/ic_heroes.xml" value="0.21203703703703702" />
@@ -22,5 +32,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.1956521739130435" />
+      </ProjectState>
+    </option>
   </component>
 </project>
