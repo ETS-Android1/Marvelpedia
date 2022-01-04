@@ -3,11 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/drawable/ic_baseline_image_search_24.xml" value="0.11944444444444445" />
         <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/activity_main.xml" value="0.353713768115942" />
         <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/details_fragment.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/favorites_fragment.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/heroes_fragment.xml" value="0.28434504792332266" />
-        <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/holder_list_item.xml" value="0.322463768115942" />
+        <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/holder_list_item.xml" value="0.25" />
         <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/login_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/profile_fragment.xml" value="0.1" />
         <entry key="..\:/Users/John/Desktop/Android_Projects/ProjectFuture/Marvelpedia/app/src/main/res/layout/search_fragment.xml" value="0.17831813576494426" />

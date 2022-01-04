@@ -57,7 +57,7 @@ public class FavoritesFragment extends Fragment {
         TextView favorites_txt = view.findViewById(R.id.favorites_txt);
 
         favoritesRecyclerView = view.findViewById(R.id.favorites_recycler_view);
-        MyListAdapter favoritesAdapter = new MyListAdapter(new ArrayList<>(), new MyListAdapter.MyClickListener() {
+        MyListAdapter favoritesAdapter = new MyListAdapter(new MyListAdapter.HeroDiff(), new ArrayList<>(), new MyListAdapter.myClickListener() {
             @Override
             public void onClick(View v, Hero data) {
                 // What happens when users click on items-heroes.

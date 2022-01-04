@@ -25,20 +25,22 @@ public class MyListAdapter
 
     private static final String TAG = "MyListAdapter";
     private final List<Hero> myTestAdapterHeroesList;
-    private final MyClickListener MyClickListener;
+    private final myClickListener myClickListener;
     private int lastPosition = -1;
+    //private HeroRoomDatabase database;
 
-    public MyListAdapter(List<Hero> myTestAdapterHeroesList, MyClickListener MyClickListener) {
-        super(new HeroDC());
+    public MyListAdapter(@NonNull DiffUtil.ItemCallback<Hero> diffCallback, List<Hero> myTestAdapterHeroesList/*, Context context*/, myClickListener myClickListener) {
+        super(diffCallback);
         this.myTestAdapterHeroesList = myTestAdapterHeroesList;
-        this.MyClickListener = MyClickListener;
+        this.myClickListener = myClickListener;
+        //database = Room.databaseBuilder(context, HeroRoomDatabase.class, "Marvelpedia").build();
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.holder_list_item, parent, false);
-        return new MyViewHolder(view, MyClickListener);
+        return new MyViewHolder(view, myClickListener);
     }
 
     @Override
@@ -57,11 +59,11 @@ public class MyListAdapter
         holder.clearAnimation();
     }
 
-    public interface MyClickListener {
+    public interface myClickListener {
         void onClick(View v, Hero data);
     }
 
-    private static class HeroDC extends DiffUtil.ItemCallback<Hero> {
+    public static class HeroDiff extends DiffUtil.ItemCallback<Hero> {
         @Override
         public boolean areItemsTheSame(@NonNull Hero oldItem,
                                        @NonNull Hero newItem) {
@@ -78,11 +80,11 @@ public class MyListAdapter
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private final MyClickListener MyClickListener;
+        private final myClickListener myClickListener;
 
-        public MyViewHolder(@NonNull View itemView, MyClickListener MyClickListener) {
+        public MyViewHolder(@NonNull View itemView, myClickListener myClickListener) {
             super(itemView);
-            this.MyClickListener = MyClickListener;
+            this.myClickListener = myClickListener;
         }
 
         /**
@@ -128,27 +130,49 @@ public class MyListAdapter
             hero_name.setText(data.getName());
             hero_description.setText(data.getDescription());
 
-            Glide.with(itemView)
-                    .load(data.getThumbnail().makeImageWithVariant("portrait_xlarge"))
-                    .placeholder(R.drawable.ic_baseline_image_search_24)
-                    .into(hero_thumbnail);
+            //if (data.getThumbnail()!=null){
+                Glide.with(itemView)
+                        .load(data.getThumbnail().makeImageWithVariant("portrait_xlarge"))
+                        .placeholder(R.drawable.ic_baseline_image_search_24)
+                        .into(hero_thumbnail);
+            //}
+            /*else{
+                Glide.with(itemView)
+                        .load(R.drawable.ic_baseline_image_search_24)
+                        .into(hero_thumbnail);
+            }*/
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MyClickListener.onClick(v, data);
+                    myClickListener.onClick(v, data);
                 }
             });
 
+            /*ArrayList<Hero> temp_hero_list = new ArrayList<Hero>();
+            temp_hero_list.add(data);*/
             // handle the user clicking on the 'favorite' icon.
             hero_favorite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (data.getFavorite()) {
                         data.setFavorite(false);
+                        /*new AsyncInsertToDb(database, new AsyncInsertToDb.Listener() {
+                            @Override
+                            public void onResult(boolean result) {
+
+                            }
+                        }).execute(temp_hero_list);*/
                         hero_favorite.setImageResource(R.drawable.ic_no_favorite);
                     } else {
                         data.setFavorite(true);
+                        /*new AsyncInsertToDb(database, new AsyncInsertToDb.Listener() {
+                            @Override
+                            public void onResult(boolean result) {
+
+                            }
+                        }).execute(temp_hero_list);*/
                         hero_favorite.setImageResource(R.drawable.ic_yes_favorite);
                     }
                     notifyItemChanged(getPosition());

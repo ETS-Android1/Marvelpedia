@@ -19,9 +19,11 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.FragmentNavigator;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import com.project_future_2021.marvelpedia.R;
 import com.project_future_2021.marvelpedia.data.Hero;
+import com.project_future_2021.marvelpedia.database.HeroRoomDatabase;
 import com.project_future_2021.marvelpedia.recycler_view.MyListAdapter;
 import com.project_future_2021.marvelpedia.singletons.VolleySingleton;
 import com.project_future_2021.marvelpedia.viewmodels.HeroesViewModel;
@@ -34,6 +36,7 @@ public class HeroesFragment extends Fragment {
     private static final String TAG = "HeroesFragment";
     private static final String REQUEST_TAG = "HeroesFragmentRequest";
     private HeroesViewModel heroesViewModel;
+    private HeroRoomDatabase database;
     private MyListAdapter heroesAdapter;
     private RecyclerView recyclerView;
 
@@ -49,6 +52,7 @@ public class HeroesFragment extends Fragment {
         //"heroesViewModel" will attach(-live) to the getActivity()(i.e. MainActivity)'s lifecycle.
         // So it will survive HeroesFragment destruction when navigating to other fragments.
         heroesViewModel = new ViewModelProvider(/*this*/requireActivity()).get(HeroesViewModel.class);
+        database = Room.databaseBuilder(requireContext(), HeroRoomDatabase.class, "Marvelpedia").build();
         return inflater.inflate(R.layout.heroes_fragment, container, false);
     }
 
@@ -83,6 +87,7 @@ public class HeroesFragment extends Fragment {
 
         Log.d(TAG, "onViewCreated: ");
 
+        //heroesViewModel.getHeroesFromDb();
 
         String request_type = "/v1/public/characters";
         String Url = heroesViewModel.createUrlForApiCall(request_type);
@@ -121,7 +126,7 @@ public class HeroesFragment extends Fragment {
         /* option 2:
         // start of option 2
         */
-        heroesAdapter = new MyListAdapter(new ArrayList<>(), new MyListAdapter.MyClickListener() {
+        heroesAdapter = new MyListAdapter(new MyListAdapter.HeroDiff(), new ArrayList<>(), new MyListAdapter.myClickListener() {
             @Override
             public void onClick(View v, Hero data) {
                 //Toast.makeText(getContext(), "O " + data.getName() + "favorite = " + data.getFavorite(), Toast.LENGTH_SHORT).show();
@@ -137,18 +142,6 @@ public class HeroesFragment extends Fragment {
                 //Navigation.findNavController(view).navigate(action.getActionId(), action.getArguments(), null, extras);
                 Navigation.findNavController(view).navigate(action, extrasBuilder.build());
                 Log.d(TAG, "onClick: Navigating to DetailsFragment with Hero pressed: " + data.getName());
-
-                /*
-                cardView.setOnClickListener{
-                        val extras = FragmentNavigatorExtras(imageView to "imageView")
-                        findNavController().navigate(R.id.detailAction, null, null, extras)
-                    }
-
-                    override fun onCreate(savedInstanceState: Bundle?) {
-                            super.onCreate(savedInstanceState)
-                               sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-                    }
-                    */
             }
         });
         // That should -THEORETICALLY- scroll to the last position of the RecyclerView, but...
@@ -161,6 +154,7 @@ public class HeroesFragment extends Fragment {
         // If we put "recyclerView.setAdapter(heroesAdapter);" only before or after the "observe the list code",
         // the list doesn't show when it's recreated (the user swapped fragments etc)
         // so we put it inside to code block too...
+        // The onChanged() method fires when the observed data changes and the activity is in the foreground:
         heroesViewModel.getLiveDataHeroesList().observe(getViewLifecycleOwner(), new Observer<List<Hero>>() {
             @Override
             public void onChanged(List<Hero> heroesList) {
@@ -212,12 +206,13 @@ public class HeroesFragment extends Fragment {
     @Override
     public void onDestroyView() {
         Log.d(TAG, "onDestroyView: ");
-        //if (jsonObjectRequest != null) {
+
+        //heroesViewModel.saveHeroesToDb();
+
         if (VolleySingleton.getInstance(getContext()) != null) {
             VolleySingleton.getInstance(getContext()).getRequestQueue().cancelAll(REQUEST_TAG);
             Log.d(TAG, "onDestroyView: cancelled request with tag: " + REQUEST_TAG);
         }
-        //}
         super.onDestroyView();
     }
 
