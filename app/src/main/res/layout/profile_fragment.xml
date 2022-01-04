@@ -43,7 +43,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15sp"
             android:fontFamily="sans-serif-light"
-            android:text="Profile Fragment"
+            android:text="User Name"
             android:textColor="@color/white"
             android:textSize="32sp" />
 
