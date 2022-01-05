@@ -2,39 +2,21 @@ package com.project_future_2021.marvelpedia.viewmodels;
 
 import android.app.Application;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.gson.Gson;
 import com.project_future_2021.marvelpedia.R;
-import com.project_future_2021.marvelpedia.data.Comics;
-import com.project_future_2021.marvelpedia.data.Events;
 import com.project_future_2021.marvelpedia.data.Hero;
-import com.project_future_2021.marvelpedia.data.Image;
-import com.project_future_2021.marvelpedia.data.Series;
-import com.project_future_2021.marvelpedia.data.Stories;
-import com.project_future_2021.marvelpedia.data.Url;
 import com.project_future_2021.marvelpedia.repositories.HeroRepository;
-import com.project_future_2021.marvelpedia.singletons.VolleySingleton;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HeroesViewModel extends AndroidViewModel {
@@ -45,27 +27,32 @@ public class HeroesViewModel extends AndroidViewModel {
     //TODO have that in a constants class...
     private static final String REQUEST_TAG = "HeroesFragmentRequest";
     private final HeroRepository clHeroRepository;
-    private final LiveData<List<Hero>> clAllHeroes;
+    private /*final*/ LiveData<List<Hero>> clAllHeroes;
+    //private LiveData<List<Hero>> favoriteHeroesList;
 
-    private final List<Hero> heroesList = new ArrayList<>();
-    private final MutableLiveData<List<Hero>> liveDataHeroesList;
+    private String mFinalUrl;
+    private String request_type = "/v1/public/characters";
 
-    /*@Nullable
-    private HeroRoomDatabase database;*/
 
     public int mOffset = 0;
     // TODO: should change where its value changes, probably...
     public MutableLiveData<Boolean> isLoading;
     // limit AND starting offset..
-    private int mLimit = 4;
+    private int mLimit = 30;
 
     public HeroesViewModel(@NonNull Application application) {
         super(application);
-        liveDataHeroesList = new MutableLiveData<>();
+
+        mFinalUrl = createUrlForApiCall(request_type);
+
         isLoading = new MutableLiveData<>();
 
         clHeroRepository = new HeroRepository(application);
-        clAllHeroes = clHeroRepository.getAllHeroes();
+        clAllHeroes = clHeroRepository.getAllHeroes(application.getBaseContext(), mFinalUrl, request_type);
+
+        //favoriteHeroesList = clHeroRepository.getDbFavoriteHeroes();
+
+        //favorites = clHeroRepository.getAllFavoriteHeroes();
         //database = Room.databaseBuilder(application, HeroRoomDatabase.class, "Marvelpedia").build();
         Log.d(TAG, "HeroesViewModel: constructor");
     }
@@ -78,47 +65,31 @@ public class HeroesViewModel extends AndroidViewModel {
         clHeroRepository.insert(hero);
     }
 
+    public void clInsertManyHeroes(List<Hero> heroes) {
+        clHeroRepository.insertManyHeroes(heroes);
+    }
+
+    /*public LiveData clgetAllFavoriteHeroes() {
+        return favorites;
+    }*/
+
     public void clDeleteAllHeroes() {
         clHeroRepository.deleteAllHeroes();
     }
 
-    public MutableLiveData<List<Hero>> getLiveDataHeroesList() {
-        return liveDataHeroesList;
-    }
 
-    public void getHeroesFromDb() {
-        /*new AsyncGetAllHeroesFromDb(database, new AsyncGetAllHeroesFromDb.Listener() {
-            @Override
-            public void onResult(List<Hero> result) {
-                heroesList.addAll(result);
-                liveDataHeroesList.setValue(heroesList);
-                Log.d(TAG, "getHeroesFromDb: just got from the DB:\n" + result.toString());
-            }
-        }).execute();*/
-    }
-
-    public void saveHeroesToDb() {
-        /*new AsyncInsertToDb(database, new AsyncInsertToDb.Listener() {
-            @Override
-            public void onResult(boolean result) {
-                if (result) {
-                    Log.d(TAG, "saveHeroesToDb was successful.");
-                } else {
-                    Log.e(TAG, "saveHeroesToDb was unsuccessful!");
-                }
-            }
-        }).execute(getLiveDataHeroesList().getValue());*/
-    }
-
-    public void getHeroesFromServer(String url, String requestTag) {
+    //TODO actually bad, try moving it completely to repo
+    /*public void getHeroesFromServer(String url, String requestTag) {
         isLoading.setValue(true);
-        Gson gson = new Gson();
+        JsonObjectRequest jsonObjectRequest;
+        jsonObjectRequest = clHeroRepository.getHeroesFromServer(url, requestTag, mOffset, mLimit);
+        /*Gson gson = new Gson();
 
-        /*if (Objects.equals(getLiveDataHeroesList().getValue(), heroesList)){
-            Log.d(TAG, "getHeroesFromServer: hi there, been here before.");
-            isLoading.setValue(false);
-            return;
-        }*/
+//        if (Objects.equals(getLiveDataHeroesList().getValue(), heroesList)){
+//            Log.d(TAG, "getHeroesFromServer: hi there, been here before.");
+//            isLoading.setValue(false);
+//            return;
+//        }
 
         //getHeroesFromDb();
 
@@ -173,9 +144,9 @@ public class HeroesViewModel extends AndroidViewModel {
                                 temp_hero_modified = results.getJSONObject(i).getString("modified");
 
                                 temp_hero_thumbnail = gson.fromJson(results.getJSONObject(i).getString("thumbnail"), Image.class);
-                                /*if (temp_hero_thumbnail.getPath().endsWith("image_not_available")) {
-                                    temp_hero_thumbnail.setPath("");
-                                }*/
+//                                if (temp_hero_thumbnail.getPath().endsWith("image_not_available")) {
+//                                    temp_hero_thumbnail.setPath("");
+//                                }
 
                                 temp_hero_resourceURI = results.getJSONObject(i).getString("resourceURI");
                                 temp_hero_comics = gson.fromJson(results.getJSONObject(i).getString("comics"), Comics.class);
@@ -189,16 +160,7 @@ public class HeroesViewModel extends AndroidViewModel {
                                     temp_hero_urls.add(temp_url);
                                 }
 
-                                /*new AsyncGetHeroFromDb(database, new AsyncGetHeroFromDb.Listener() {
-                                    @Override
-                                    public void onResult(Hero resultHero) {
-                                        if (resultHero.getFavorite())
-                                        temp_hero.setFavorite(true);
-                                        heroesList.add(temp_hero);
-                                    }
-                                }).execute(temp_hero_id);*/
-
-                                temp_hero = new Hero(temp_hero_id, temp_hero_name, temp_hero_description, temp_hero_modified, temp_hero_thumbnail, temp_hero_resourceURI, temp_hero_comics, temp_hero_series, temp_hero_stories, temp_hero_events, temp_hero_urls/*, wasHeFavorite[0]*/);
+                                temp_hero = new Hero(temp_hero_id, temp_hero_name, temp_hero_description, temp_hero_modified, temp_hero_thumbnail, temp_hero_resourceURI, temp_hero_comics, temp_hero_series, temp_hero_stories, temp_hero_events, temp_hero_urls//, wasHeFavorite[0]);
 
                                 // TODO: subject to change, will see.
                                 // Do not re-add items already on the list.
@@ -229,13 +191,17 @@ public class HeroesViewModel extends AndroidViewModel {
                         //isLoading.setValue(false);
                         Toast.makeText(getApplication().getBaseContext(), "Something went wrong " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                });
+                });*//*
+
+
+
         //put an identifying TAG to the request queue so we can cancel it anytime.
         jsonObjectRequest.setTag(requestTag);
 
         // Add the request to the RequestQueue.
         VolleySingleton.getInstance(getApplication().getBaseContext()).addToRequestQueue(jsonObjectRequest);
-    }
+        isLoading.setValue(false);
+    }*/
 
     public String createUrlForApiCall(String request_type) {
         String timestamp_now = getNow();
@@ -261,10 +227,12 @@ public class HeroesViewModel extends AndroidViewModel {
         return final_url;
     }
 
-    public void loadMore(String request_type) {
+    public void loadMore(/*String request_type*/) {
         mOffset += mLimit;
         String newUrl = createUrlForApiCall(request_type);
-        getHeroesFromServer(newUrl, REQUEST_TAG);
+        clHeroRepository.getHeroesFromServer(getApplication().getBaseContext(), mFinalUrl, REQUEST_TAG, mOffset, mLimit);
+        //getHeroesFromServer(newUrl, REQUEST_TAG);
+        Log.d(TAG, "loadMore: ");
     }
 
     private String getNow() {
@@ -292,7 +260,7 @@ public class HeroesViewModel extends AndroidViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        Log.d(TAG, "onCleared: Will clear this list now: " + heroesList.toString());
-        heroesList.clear();
+        //Log.d(TAG, "onCleared: Will clear this list now: " + heroesList.toString());
+        //heroesList.clear();
     }
 }

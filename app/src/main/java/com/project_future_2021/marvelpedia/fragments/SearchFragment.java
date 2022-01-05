@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.project_future_2021.marvelpedia.R;
 import com.project_future_2021.marvelpedia.data.Hero;
+import com.project_future_2021.marvelpedia.data.Image;
 import com.project_future_2021.marvelpedia.viewmodels.HeroesViewModel;
 import com.project_future_2021.marvelpedia.viewmodels.SearchViewModel;
 
@@ -69,13 +70,19 @@ public class SearchFragment extends Fragment {
         Button btnDelete = view.findViewById(R.id.btnDelete);
         Button btnShow = view.findViewById(R.id.btnShow);
 
-        Hero temp_hero = new Hero(007, "onoma", "perigrafi", true);
-        Hero temp_hero2 = thirdHeroesViewModel.getLiveDataHeroesList().getValue().get(1);
+        Image temp_img = new Image("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784", "jpg");
+        Hero temp_hero = new Hero(007, "onoma", "perigrafi", temp_img, true);
+        //Hero temp_hero2 = thirdHeroesViewModel.getClAllHeroes();
 
+        final String[] temp_text = {""};
         thirdHeroesViewModel.getClAllHeroes().observe(getViewLifecycleOwner(), new Observer<List<Hero>>() {
             @Override
             public void onChanged(List<Hero> heroes) {
-                textFeedback.setText(heroes.toString());
+                temp_text[0] = "";
+                for (Hero hero : heroes) {
+                    temp_text[0] = temp_text[0].concat(hero.getName() + " " + hero.getFavorite() + "\n");
+                }
+                textFeedback.setText(temp_text[0]);
             }
         });
 
@@ -105,7 +112,7 @@ public class SearchFragment extends Fragment {
                     }
                 }).execute(thirdHeroesViewModel.getLiveDataHeroesList().getValue());*/
                 //thirdHeroesViewModel.clInsert(temp_hero);
-                thirdHeroesViewModel.clInsert(temp_hero2);
+                thirdHeroesViewModel.clInsertManyHeroes(thirdHeroesViewModel.getClAllHeroes().getValue());
             }
         });
 

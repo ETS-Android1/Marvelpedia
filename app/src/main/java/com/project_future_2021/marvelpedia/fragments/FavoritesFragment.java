@@ -71,7 +71,7 @@ public class FavoritesFragment extends Fragment {
                 favorites_txt.setText(s);
             }
         });*/
-        secondHeroesViewModel.getLiveDataHeroesList().observe(getViewLifecycleOwner(), new Observer<List<Hero>>() {
+        /*secondHeroesViewModel.getLiveDataHeroesList().observe(getViewLifecycleOwner(), new Observer<List<Hero>>() {
             @Override
             public void onChanged(List<Hero> heroes) {
                 // What happens when changes in the list occur.
@@ -82,7 +82,7 @@ public class FavoritesFragment extends Fragment {
                 }
                 favorites_txt.setText(s);
             }
-        });
+        });*/
     }
 
 }

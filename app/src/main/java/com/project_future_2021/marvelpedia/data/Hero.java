@@ -143,6 +143,14 @@ public class Hero implements Parcelable {
         this.isFavorite = isFavorite;
     }
 
+    public Hero(Integer id, String name, String description, Image thumbnail, Boolean isFavorite) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.thumbnail = thumbnail;
+        this.isFavorite = isFavorite;
+    }
+
     protected Hero(Parcel in) {
         if (in.readByte() == 0) {
             id = null;

@@ -14,6 +14,9 @@ import java.util.List;
 @Dao
 public interface HeroDao {
 
+    /*@Query("SELECT * FROM heroes_table ORDER BY name ASC")
+    LiveData<List<Hero>> getAllHeroes();*/
+
     @Query("SELECT * FROM heroes_table")
     LiveData<List<Hero>> getAllHeroes();
 

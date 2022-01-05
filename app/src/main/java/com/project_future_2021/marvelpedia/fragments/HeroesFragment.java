@@ -31,6 +31,14 @@ import com.project_future_2021.marvelpedia.viewmodels.HeroesViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO s:
+// Refactor viewmodel and repo to human...
+// Load more does not work properly
+// Change loadFromServer to not bring context into repository
+// Favorites don't work.
+//      serverList overrides dbList (good)
+//      but also its favorites too(by default they all are un-favorite) (bad)
+
 public class HeroesFragment extends Fragment {
 
     private static final String TAG = "HeroesFragment";
@@ -89,9 +97,9 @@ public class HeroesFragment extends Fragment {
 
         //heroesViewModel.getHeroesFromDb();
 
-        String request_type = "/v1/public/characters";
-        String Url = heroesViewModel.createUrlForApiCall(request_type);
-        heroesViewModel.getHeroesFromServer(Url, REQUEST_TAG);
+        //String request_type = "/v1/public/characters";
+        //String Url = heroesViewModel.createUrlForApiCall(request_type);
+        //heroesViewModel.getHeroesFromServer(Url, REQUEST_TAG);
 
         recyclerView = view.findViewById(R.id.recyclerView);
         NestedScrollView nestedScrollView = view.findViewById(R.id.heroes_layout);
@@ -101,7 +109,7 @@ public class HeroesFragment extends Fragment {
                 // on scroll change we are checking when users scroll as bottom.
                 if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
                     Log.d(TAG, "onScrollChange: We reached the bottom of the page. Will fetch more data now...");
-                    heroesViewModel.loadMore(request_type);
+                    heroesViewModel.loadMore(/*request_type*/);
                 }
             }
         });
@@ -155,7 +163,7 @@ public class HeroesFragment extends Fragment {
         // the list doesn't show when it's recreated (the user swapped fragments etc)
         // so we put it inside to code block too...
         // The onChanged() method fires when the observed data changes and the activity is in the foreground:
-        heroesViewModel.getLiveDataHeroesList().observe(getViewLifecycleOwner(), new Observer<List<Hero>>() {
+        heroesViewModel.getClAllHeroes().observe(getViewLifecycleOwner(), new Observer<List<Hero>>() {
             @Override
             public void onChanged(List<Hero> heroesList) {
                 heroesAdapter.submitList(heroesList);
