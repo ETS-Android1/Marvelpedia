@@ -6,7 +6,9 @@
     <string name="password_field">Password</string>
     <string name="marvelname">MarvelName</string>
     <string name="name">Name</string>
-    <string name="surname">Surname</string>
     <string name="email">Email</string>
     <string name="user_name">User Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="first_name">First Name</string>
+    <string name="marvel_name">Marvel Name</string>
 </resources>
