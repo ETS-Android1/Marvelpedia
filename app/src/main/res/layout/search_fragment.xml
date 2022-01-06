@@ -75,6 +75,7 @@
         android:ems="10"
         android:hint="i.e. Spider, SuperMan etc"
         android:inputType="textPersonName"
+        android:minHeight="48dp"
         android:minLines="1"
         app:layout_constraintRight_toLeftOf="@id/btnSearch"
         app:layout_constraintStart_toStartOf="parent"

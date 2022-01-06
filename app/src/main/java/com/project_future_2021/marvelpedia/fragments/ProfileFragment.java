@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ public class ProfileFragment extends Fragment {
 
     private static final String TAG = "ProfileFragment";
     private ProfileViewModel profileViewModel;
+    private Button btnShare;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -42,6 +44,15 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        btnShare = view.findViewById(R.id.btnShare);
+        btnShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // What happens when users click this button?
+            }
+        });
+
+        // ignore these
         /*TextView profile_txt = view.findViewById(R.id.profile_txt);
         profileViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
