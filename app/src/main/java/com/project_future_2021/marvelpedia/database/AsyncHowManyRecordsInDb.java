@@ -4,11 +4,11 @@ import android.os.AsyncTask;
 
 public class AsyncHowManyRecordsInDb extends AsyncTask<Void, Void, Integer> {
 
-    private HeroRoomDatabase heroRoomDatabase;
-    private Listener listener;
+    private final HeroRoomDatabase heroRoomDatabase;
+    private final Listener listener;
 
     public interface Listener {
-        public void onResult(Integer resultNumber);
+        void onResult(Integer resultNumber);
     }
 
     public AsyncHowManyRecordsInDb(HeroRoomDatabase heroRoomDatabase, Listener listener) {

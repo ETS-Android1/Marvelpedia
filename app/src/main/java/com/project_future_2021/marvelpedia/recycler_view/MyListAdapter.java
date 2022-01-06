@@ -131,10 +131,10 @@ public class MyListAdapter
             hero_description.setText(data.getDescription());
 
             //if (data.getThumbnail()!=null){
-                Glide.with(itemView)
-                        .load(data.getThumbnail().makeImageWithVariant("portrait_xlarge"))
-                        .placeholder(R.drawable.ic_baseline_image_search_24)
-                        .into(hero_thumbnail);
+            Glide.with(itemView)
+                    .load(data.getThumbnail().makeImageWithVariant("portrait_xlarge"))
+                    .placeholder(R.drawable.ic_baseline_image_search_24)
+                    .into(hero_thumbnail);
             //}
             /*else{
                 Glide.with(itemView)

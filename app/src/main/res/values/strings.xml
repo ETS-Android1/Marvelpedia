@@ -4,8 +4,6 @@
     <string name="register_button">Register! It\'s Free! (for now)</string>
     <string name="login_button">Let\'s go!</string>
     <string name="password_field">Password</string>
-    <string name="email_field">Username</string>
-    <string name="login_text">It\'s Login Time!</string>
 
     <string name="marvelname">MarvelName</string>
     <string name="name">Name</string>
@@ -33,4 +31,5 @@
     <string name="public_API_key">da311cab234d0c1a1134f345bc99fa2a</string>
     <string name="base_url">https://gateway.marvel.com</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="forgot_pass_button">Forgot my Password</string>
 </resources>

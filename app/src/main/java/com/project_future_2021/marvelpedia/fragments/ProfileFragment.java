@@ -4,16 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.transition.MaterialFadeThrough;
 import com.project_future_2021.marvelpedia.R;
 import com.project_future_2021.marvelpedia.viewmodels.ProfileViewModel;
@@ -46,7 +42,7 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView profile_txt = view.findViewById(R.id.profile_txt);
+        /*TextView profile_txt = view.findViewById(R.id.profile_txt);
         profileViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
@@ -58,6 +54,6 @@ public class ProfileFragment extends Fragment {
 
         Glide.with(this)
                 .load(R.drawable.gif1)
-                .into(image);
+                .into(image);*/
     }
 }

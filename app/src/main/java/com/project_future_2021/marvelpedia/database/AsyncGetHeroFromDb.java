@@ -6,11 +6,11 @@ import com.project_future_2021.marvelpedia.data.Hero;
 
 public class AsyncGetHeroFromDb extends AsyncTask<Integer, Void, Hero> {
 
-    private HeroRoomDatabase heroRoomDatabase;
-    private Listener listener;
+    private final HeroRoomDatabase heroRoomDatabase;
+    private final Listener listener;
 
     public interface Listener {
-        public void onResult(Hero resultHero);
+        void onResult(Hero resultHero);
     }
 
     public AsyncGetHeroFromDb(HeroRoomDatabase heroRoomDatabase, Listener listener) {

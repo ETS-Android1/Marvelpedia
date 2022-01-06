@@ -49,6 +49,8 @@ public class HeroRepository {
     int repoOffset = -1;
     int repoLimit = -1;
 
+    private final MutableLiveData<List<Hero>> repoListOfHeroesTheUserSearchedFor;
+
 
     public HeroRepository(Application application, String urlFromViewModel, int offsetFromViewmodel, int limitFromViewmodel) {
         Log.d(TAG, "HeroRepository: Initiating the Repository...");
@@ -59,6 +61,8 @@ public class HeroRepository {
         repoIsLoading.setValue(false);
 
         repoServerHeroes = new MutableLiveData<>();
+
+        repoListOfHeroesTheUserSearchedFor = new MutableLiveData<>();
 
         heroDao = db.heroDao();
         heroApi = initHeroApi();
@@ -93,6 +97,10 @@ public class HeroRepository {
         return repoServerHeroes;
     }
 
+    public MutableLiveData<List<Hero>> getRepoListOfHeroesTheUserSearchedFor() {
+        return repoListOfHeroesTheUserSearchedFor;
+    }
+
     public LiveData<List<Hero>> getRepoDbHeroes() {
         return repoDbHeroes;
     }
@@ -104,8 +112,12 @@ public class HeroRepository {
         return new HeroApi.TalkWithServer() {
             @Override
             public List<Hero> getHeroesFromServer(Context context, String url, String requestTag, int offset, int limit) {
-
                 return RepoGetHeroesFromServer(context, url, requestTag, offset, limit);
+            }
+
+            @Override
+            public List<Hero> getHeroesFromServerWithName(Context context, String url, String requestTag, String heroName) {
+                return RepoSearchForHeroesWithName(context, url, requestTag, heroName);
             }
 
             @Override
@@ -270,6 +282,101 @@ public class HeroRepository {
         VolleySingleton.getInstance(context).addToRequestQueue(jsonObjectRequest);
 
         return simpleRepoServerHeroes;
+    }
+
+    public List<Hero> RepoSearchForHeroesWithName(Context context, String url, String requestTag, String heroName) {
+        List<Hero> resultList = new ArrayList<>();
+        Gson gson = new Gson();
+
+        Log.d(TAG, "RepoSearchForHeroesWithName: called with FINAL url: " + url);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        JSONArray results = null;
+                        int resultSize = 0;
+                        try {
+                            results = response.getJSONObject("data").getJSONArray("results");
+                            resultSize = response.getJSONObject("data").getInt("count");
+
+
+                            Hero temp_hero;
+                            Image temp_hero_thumbnail;
+                            int temp_hero_id;
+                            String temp_hero_name;
+                            String temp_hero_description;
+                            String temp_hero_modified;
+                            String temp_hero_resourceURI;
+
+                            Comics temp_hero_comics;
+                            Series temp_hero_series;
+                            Stories temp_hero_stories;
+                            Events temp_hero_events;
+                            JSONArray urls;
+                            List<Url> temp_hero_urls = new ArrayList<>();
+
+                            for (int i = 0; i < resultSize; i++) {
+                                temp_hero_id = results.getJSONObject(i).getInt("id");
+                                temp_hero_name = results.getJSONObject(i).getString("name");
+
+                                temp_hero_description = results.getJSONObject(i).getString("description");
+                                if (temp_hero_description.isEmpty()) {
+                                    temp_hero_description = "This hero has no description yet. \nWe will add one later :)";
+                                }
+
+                                temp_hero_modified = results.getJSONObject(i).getString("modified");
+
+                                temp_hero_thumbnail = gson.fromJson(results.getJSONObject(i).getString("thumbnail"), Image.class);
+                                /*if (temp_hero_thumbnail.getPath().endsWith("image_not_available")) {
+                                    temp_hero_thumbnail.setPath("");
+                                }*/
+
+                                temp_hero_resourceURI = results.getJSONObject(i).getString("resourceURI");
+                                temp_hero_comics = gson.fromJson(results.getJSONObject(i).getString("comics"), Comics.class);
+                                temp_hero_series = gson.fromJson(results.getJSONObject(i).getString("series"), Series.class);
+                                temp_hero_stories = gson.fromJson(results.getJSONObject(i).getString("stories"), Stories.class);
+                                temp_hero_events = gson.fromJson(results.getJSONObject(i).getString("events"), Events.class);
+
+                                urls = results.getJSONObject(i).getJSONArray("urls");
+                                for (int j = 0; j < urls.length(); j++) {
+                                    Url temp_url = gson.fromJson(urls.getString(j), Url.class);
+                                    temp_hero_urls.add(temp_url);
+                                }
+
+                                temp_hero = new Hero(temp_hero_id, temp_hero_name, temp_hero_description, temp_hero_modified, temp_hero_thumbnail, temp_hero_resourceURI, temp_hero_comics, temp_hero_series, temp_hero_stories, temp_hero_events, temp_hero_urls/*, wasHeFavorite[0]*/);
+
+
+                                resultList.add(temp_hero);
+                            }
+                            repoListOfHeroesTheUserSearchedFor.postValue(resultList);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(context, "Server not responding!\n Try again later.", Toast.LENGTH_LONG).show();
+
+                            Log.e(TAG, "onResponse: Something went wrong: " + e.getMessage());
+                        }
+                        Log.d(TAG, "onResponse: I arrived!");
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                        Toast.makeText(context, "You are in offline mode \n" +
+                                "check network or try again later.", Toast.LENGTH_LONG).show();
+                        Log.e(TAG, "onErrorResponse: Something went wrong with the server call: " + error.getMessage());
+                    }
+                });
+        //put an identifying TAG to the request queue so we can cancel it anytime.
+        jsonObjectRequest.setTag(requestTag);
+
+        // Add the request to the RequestQueue.
+        VolleySingleton.getInstance(context).addToRequestQueue(jsonObjectRequest);
+
+        return resultList;
     }
 
     // We must call these Database-calls on a non-UI thread or our app will throw an exception. Room ensures

@@ -6,9 +6,6 @@ import android.os.Parcelable;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
-
-import com.project_future_2021.marvelpedia.database.ImageConverter;
 
 import java.util.List;
 import java.util.Objects;

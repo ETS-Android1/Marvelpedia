@@ -10,8 +10,8 @@ import java.util.List;
 
 public class AsyncGetAllHeroesFromDb extends AsyncTask<Void, Void, LiveData<List<Hero>>> {
 
-    private HeroRoomDatabase heroRoomDatabase;
-    private Listener listener;
+    private final HeroRoomDatabase heroRoomDatabase;
+    private final Listener listener;
 
     @Override
     protected LiveData<List<Hero>> doInBackground(Void... voids) {
@@ -23,7 +23,7 @@ public class AsyncGetAllHeroesFromDb extends AsyncTask<Void, Void, LiveData<List
     }
 
     public interface Listener {
-        public void onResult(LiveData<List<Hero>> result);
+        void onResult(LiveData<List<Hero>> result);
     }
 
     public AsyncGetAllHeroesFromDb(HeroRoomDatabase heroRoomDatabase, Listener listener) {

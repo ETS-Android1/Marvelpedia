@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/default_padding">
 
 
-<TextView
+    <TextView
         android:id="@+id/register_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,8 +28,7 @@
         app:boxCornerRadiusBottomEnd="4dp"
         app:boxCornerRadiusBottomStart="4dp"
         app:boxCornerRadiusTopEnd="4dp"
-        app:boxCornerRadiusTopStart="4dp"
-        >
+        app:boxCornerRadiusTopStart="4dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/register_username_value"
@@ -49,8 +48,7 @@
         app:boxCornerRadiusBottomEnd="4dp"
         app:boxCornerRadiusBottomStart="4dp"
         app:boxCornerRadiusTopEnd="4dp"
-        app:boxCornerRadiusTopStart="4dp"
-        >
+        app:boxCornerRadiusTopStart="4dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/register_password_value"
@@ -70,8 +68,7 @@
         app:boxCornerRadiusBottomEnd="4dp"
         app:boxCornerRadiusBottomStart="4dp"
         app:boxCornerRadiusTopEnd="4dp"
-        app:boxCornerRadiusTopStart="4dp"
-        >
+        app:boxCornerRadiusTopStart="4dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/confirm_password_value"
@@ -80,7 +77,6 @@
             android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
 
 
     <Button

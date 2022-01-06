@@ -23,6 +23,7 @@ import java.util.List;
 public class HeroesViewModel extends AndroidViewModel {
     //TODO have that in a constants class...
     private static final String TAG = "HeroesViewModel";
+    private static final String REQUEST_TAG = "HeroesFragmentRequest";
 
     private final HeroRepository heroRepository;
     // 'vm' for viewmodel
@@ -30,20 +31,29 @@ public class HeroesViewModel extends AndroidViewModel {
     private final MutableLiveData<List<Hero>> vmServerHeroes;
     private final LiveData<List<Hero>> vmDbHeroes;
 
+    private final MutableLiveData<List<Hero>> vmListOfHeroesTheUserSearchedFor;
+
     // limit and offset are both (optional) parameters in the url we use to access the Server.
     // limit also, logically, works as the starting offset (if 0 data in DB).
     private final int vmLimit = 6;
-    private int vmOffset = 0;
     private final MutableLiveData<Boolean> vmIsLoading;
     private final String vmUrl;
     private final String request_type = "/v1/public/characters";
+    // TODO change this, according to Server's Api Instructions
+    private final String request_type_for_search = "/v1/public/characters";
+    private final String urlForSearch;
+    private int vmOffset = 0;
 
     public HeroesViewModel(@NonNull Application application) {
         super(application);
         Log.d(TAG, "HeroesViewModel: constructor");
 
-        vmUrl = createUrlForApiCall(request_type);
         vmIsLoading = new MutableLiveData<>();
+
+        vmUrl = createUrlForApiCall(request_type);
+
+        urlForSearch = createUrlForApiCall(request_type_for_search);
+
 
         heroRepository = new HeroRepository(application, vmUrl, vmOffset, vmLimit);
 
@@ -51,6 +61,8 @@ public class HeroesViewModel extends AndroidViewModel {
 
         vmDbHeroes = heroRepository.getRepoDbHeroes();
         vmServerHeroes = heroRepository.getRepoServerHeroes();
+
+        vmListOfHeroesTheUserSearchedFor = heroRepository.getRepoListOfHeroesTheUserSearchedFor();
 
         // when new heroes are fetched from the Server, only add them to the DB,
         // [SOS] We will only be observing the DB for changes.
@@ -97,6 +109,10 @@ public class HeroesViewModel extends AndroidViewModel {
         return vmAllHeroesCombined;
     }
 
+    public LiveData<List<Hero>> getVmListOfHeroesTheUserSearchedFor() {
+        return vmListOfHeroesTheUserSearchedFor;
+    }
+
     public void insertHero(Hero hero) {
         heroRepository.insert(hero);
     }
@@ -107,6 +123,14 @@ public class HeroesViewModel extends AndroidViewModel {
 
     public void deleteAllHeroes() {
         heroRepository.deleteAllHeroes();
+    }
+
+    public HeroRepository getHeroRepository() {
+        return heroRepository;
+    }
+
+    public void searchForHeroesWithName(String heroName, String REQUEST_TAG) {
+        heroRepository.RepoSearchForHeroesWithName(getApplication().getBaseContext(), urlForSearch, REQUEST_TAG, heroName);
     }
 
     public String createUrlForApiCall(String request_type) {
