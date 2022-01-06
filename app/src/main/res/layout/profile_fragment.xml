@@ -13,60 +13,35 @@
         android:layout_height="wrap_content"
         android:background="@drawable/grad">
 
-        <RelativeLayout
-            android:id="@+id/image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="323dp">
-
-            <ImageView
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_above="@+id/profile_txt"
-                android:layout_marginStart="9dp"
-                android:layout_marginTop="9dp"
-                android:layout_marginEnd="9dp"
-                android:layout_marginBottom="9dp"
-                android:background="@drawable/circle"
-                android:padding="3dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_profile"
-                tools:ignore="NotSibling" />
-
-        </RelativeLayout>
-
-        <EditText
-            android:id="@+id/profile_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/image"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/marvel_name"
-            android:textColor="@color/white"
-            android:textSize="32sp">
-
-        </EditText>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/profile_txt"
-            android:layout_marginTop="49dp"
+            android:layout_marginTop="135dp"
             android:layout_marginBottom="150dp"
             tools:ignore="NotSibling">
 
 
+            <EditText
+                android:id="@+id/profile_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/marvel_name"
+                android:textColor="@color/white"
+                android:textSize="32sp">
+
+            </EditText>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/image"
                 android:layout_marginStart="30sp"
                 android:layout_marginLeft="30sp"
-                android:layout_marginTop="30sp"
+                android:layout_marginTop="180dp"
                 android:layout_marginEnd="30sp"
                 android:layout_marginBottom="30sp"
                 android:orientation="vertical">
@@ -90,6 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30sp"
+                    android:layout_marginBottom="30sp"
                     android:text="@string/last_name"
                     android:textColor="@color/teal_200"
                     android:textSize="20sp" />
@@ -99,6 +75,18 @@
 
 
         </RelativeLayout>
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="123dp"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginEnd="9dp"
+            android:layout_marginBottom="9dp"
+            android:background="@drawable/circle"
+            android:padding="3dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/marvel" />
 
 
     </RelativeLayout>
