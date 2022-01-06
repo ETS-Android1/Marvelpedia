@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -17,6 +18,7 @@ import com.project_future_2021.marvelpedia.R;
 
 public class RegisterBottomSheetFragment extends BottomSheetDialogFragment {
 
+    public static final String TAG = "RegisterBottomSheetFragment";
     private TextInputEditText registerUsername;
     private TextInputEditText registerPassword;
     private TextInputEditText confirmPassword;
@@ -31,17 +33,14 @@ public class RegisterBottomSheetFragment extends BottomSheetDialogFragment {
         super.onCreate(savedInstanceState);
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable
-            ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.register_bottom_sheet,
-                container, false);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        registerUsername = v.findViewById(R.id.register_username);
-        registerPassword = v.findViewById(R.id.register_password_value);
-        confirmPassword = v.findViewById(R.id.confirm_password_value);
-        button = v.findViewById(R.id.register_button);
+        registerUsername = view.findViewById(R.id.register_username_value);
+        registerPassword = view.findViewById(R.id.register_password_value);
+        confirmPassword = view.findViewById(R.id.confirm_password_value);
+        button = view.findViewById(R.id.register_button);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +53,7 @@ public class RegisterBottomSheetFragment extends BottomSheetDialogFragment {
                     Toast.makeText(getActivity(), "Info are missing", Toast.LENGTH_SHORT).show();
                 } else {
 
-                    if (checkFirstPassword == checkSecondPassword) {
+                    if (checkFirstPassword.equals(checkSecondPassword)) {
 
                         Toast.makeText(getActivity(), "Account Created", Toast.LENGTH_SHORT).show();
 
@@ -71,12 +70,17 @@ public class RegisterBottomSheetFragment extends BottomSheetDialogFragment {
 
             }
         });
+    }
 
-        return v;
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable
+            ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.register_bottom_sheet,
+                container, false);
 
     }
 
-    private void openMainActivity () {
+    private void openMainActivity() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
     }
