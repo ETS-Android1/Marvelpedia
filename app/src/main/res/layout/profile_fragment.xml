@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,11 +8,10 @@
     tools:context=".fragments.ProfileFragment">
 
     <RelativeLayout
-        android:id="@+id/rellay1"
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/grad"
-        tools:ignore="MissingConstraints">
+        android:background="@drawable/grad">
 
         <RelativeLayout
             android:id="@+id/image"
@@ -20,18 +19,21 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="323dp"
-            android:background="@drawable/circle_border">
+            android:layout_marginEnd="323dp">
 
             <ImageView
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:layout_margin="9dp"
-                android:adjustViewBounds="true"
+                android:layout_above="@+id/profile_txt"
+                android:layout_marginStart="9dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="9dp"
+                android:layout_marginBottom="9dp"
                 android:background="@drawable/circle"
                 android:padding="3dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_profile" />
+                android:src="@drawable/ic_profile"
+                tools:ignore="NotSibling" />
 
         </RelativeLayout>
 
@@ -39,32 +41,70 @@
             android:id="@+id/profile_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/image"
+            android:layout_below="@+id/image"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="15sp"
+            android:layout_marginTop="25dp"
             android:fontFamily="sans-serif-light"
             android:text="User Name"
             android:textColor="@color/white"
-            android:textSize="32sp" />
+            android:textSize="32sp">
 
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        </TextView>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_below="@+id/profile_txt"
+            android:layout_marginTop="80dp"
+            tools:ignore="NotSibling">
 
-            <TextView
-                android:layout_width="wrap_content"
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/image"
+                android:layout_marginStart="30sp"
+                android:layout_marginLeft="30sp"
+                android:layout_marginTop="30sp"
+                android:layout_marginEnd="30sp"
+                android:layout_marginBottom="30sp"
+                android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email"
+                    android:textColor="@color/teal_200"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30sp"
+                    android:text="Name"
+                    android:textColor="@color/teal_200"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30sp"
+                    android:text="Surname"
+                    android:textColor="@color/teal_200"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30sp"
+                    android:layout_marginBottom="30sp"
+                    android:text="MarvelName"
+                    android:textColor="@color/teal_200"
+                    android:textSize="20sp" />
+
+
+            </LinearLayout>
         </RelativeLayout>
-    </LinearLayout>
 
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
