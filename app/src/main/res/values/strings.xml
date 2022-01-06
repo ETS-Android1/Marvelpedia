@@ -4,4 +4,9 @@
     <string name="forgot_pass_button">Damn it! I forgot my pass</string>
     <string name="login_button">Let's go!</string>
     <string name="password_field">Password</string>
+    <string name="marvelname">MarvelName</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="email">Email</string>
+    <string name="user_name">User Name</string>
 </resources>

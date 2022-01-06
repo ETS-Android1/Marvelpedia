@@ -45,7 +45,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="25dp"
             android:fontFamily="sans-serif-light"
-            android:text="User Name"
+            android:text="@string/user_name"
             android:textColor="@color/white"
             android:textSize="32sp">
 
@@ -73,7 +73,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Email"
+                    android:text="@string/email"
                     android:textColor="@color/teal_200"
                     android:textSize="20sp" />
 
@@ -81,7 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30sp"
-                    android:text="Name"
+                    android:text="@string/name"
                     android:textColor="@color/teal_200"
                     android:textSize="20sp" />
 
@@ -89,7 +89,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30sp"
-                    android:text="Surname"
+                    android:text="@string/surname"
                     android:textColor="@color/teal_200"
                     android:textSize="20sp" />
 
@@ -98,13 +98,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30sp"
                     android:layout_marginBottom="30sp"
-                    android:text="MarvelName"
+                    android:text="@string/marvelname"
                     android:textColor="@color/teal_200"
                     android:textSize="20sp" />
 
 
             </LinearLayout>
         </RelativeLayout>
-
 
     </RelativeLayout>
