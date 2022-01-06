@@ -3,6 +3,13 @@ package com.project_future_2021.marvelpedia.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import com.project_future_2021.marvelpedia.database.ImageConverter;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -23,9 +30,11 @@ events	ResourceList	A resource list of events in which this character appears.
 series	ResourceList	A resource list of series in which this character appears.
 *
 * */
+@Entity(tableName = "heroes_table")
 public class Hero implements Parcelable {
 
     //The unique ID of the character resource.
+    @PrimaryKey
     private Integer id;
 
     //The name of the character.
@@ -40,25 +49,32 @@ public class Hero implements Parcelable {
 
     //Image image
     //The representative image for this character.
+    //@Ignore
+    //@TypeConverters(ImageConverter.class)
     private Image thumbnail;
 
     //The canonical URL identifier for this resource.
     private String resourceURI;
 
     //A resource list containing comics which feature this character.
+    @Ignore
     private Comics comics;
 
     //A resource list of series in which this character appears.
+    @Ignore
     private Series series;
 
     //A resource list of stories in which this character appears.
+    @Ignore
     private Stories stories;
 
     //A resource list of events in which this character appears.
+    @Ignore
     private Events events;
 
     //Array[Url] urls
     //A set of public web site URLs for the resource.
+    @Ignore
     private List<Url> urls;
 
     private Boolean isFavorite = false;
@@ -116,6 +132,23 @@ public class Hero implements Parcelable {
         this.name = name;
         this.description = description;
         this.modified = modified;
+        this.thumbnail = thumbnail;
+        this.isFavorite = isFavorite;
+    }
+
+    public Hero(Integer id, String name, String description, Boolean isFavorite) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.isFavorite = isFavorite;
+        //TODO was added during debug, should probably remove later..
+        this.thumbnail = new Image("emptyPath", "emptyExtension");
+    }
+
+    public Hero(Integer id, String name, String description, Image thumbnail, Boolean isFavorite) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
         this.thumbnail = thumbnail;
         this.isFavorite = isFavorite;
     }
