@@ -55,7 +55,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/profile_txt"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="49dp"
+            android:layout_marginBottom="150dp"
             tools:ignore="NotSibling">
 
 
@@ -95,6 +96,23 @@
 
 
             </LinearLayout>
+
+
         </RelativeLayout>
+
+        <Button
+            android:id="@+id/create"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="580dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/purple_500"
+            android:gravity="center"
+            android:onClick="create"
+            android:text="CREATE"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
 
     </RelativeLayout>
