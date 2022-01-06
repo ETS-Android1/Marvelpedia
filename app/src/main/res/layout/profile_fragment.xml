@@ -1,91 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ProfileFragment">
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:background="@color/purple_500"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="120dp"
+        android:layout_height="123dp"
+        android:layout_gravity="center_horizontal"
+        android:padding="3dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/marvel" />
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/marvel_name"
+        android:textColor="@color/teal_200"
+        android:textSize="25sp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/linear_marvel_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/grad">
+        android:layout_marginTop="10dp"
+        app:boxBackgroundColor="#edf1f5"
+        app:boxCornerRadiusBottomEnd="4dp"
+        app:boxCornerRadiusBottomStart="4dp"
+        app:boxCornerRadiusTopEnd="4dp"
+        app:boxCornerRadiusTopStart="4dp"
+        android:hint="@string/marvel_name"
+        android:textColor="@color/white"
+        android:textSize="32sp">
 
-
-        <RelativeLayout
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/linear_marvel_name_value"
+            android:inputType="text"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/profile_txt"
-            android:layout_marginTop="150dp"
-            android:layout_marginBottom="150dp"
-            tools:ignore="NotSibling">
+            android:layout_height="wrap_content"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/email"
+        android:textColor="@color/teal_200"
+        android:textSize="25sp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/linear_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:boxBackgroundColor="#edf1f5"
+        app:boxCornerRadiusBottomEnd="4dp"
+        app:boxCornerRadiusBottomStart="4dp"
+        app:boxCornerRadiusTopEnd="4dp"
+        app:boxCornerRadiusTopStart="4dp"
+        android:hint="@string/email"
+        android:textColor="@color/white"
+        android:textSize="32sp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/linear_email_values"
+            android:inputType="textEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 
-            <EditText
-                android:id="@+id/profile_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:fontFamily="sans-serif-light"
-                android:text="@string/marvel_name"
-                android:textColor="@color/white"
-                android:textSize="32sp">
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/first_name"
+        android:textColor="@color/teal_200"
+        android:textSize="25sp"/>
 
-            </EditText>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/linear_first_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:boxBackgroundColor="#edf1f5"
+        app:boxCornerRadiusBottomEnd="4dp"
+        app:boxCornerRadiusBottomStart="4dp"
+        app:boxCornerRadiusTopEnd="4dp"
+        app:boxCornerRadiusTopStart="4dp"
+        android:hint="@string/first_name"
+        android:textColor="@color/white"
+        android:textSize="32sp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30sp"
-                android:layout_marginLeft="30sp"
-                android:layout_marginTop="180dp"
-                android:layout_marginEnd="30sp"
-                android:orientation="vertical">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/linear_email_first_name_value"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/email"
-                    android:textColor="@color/teal_200"
-                    android:textSize="20sp" />
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30sp"
-                    android:text="@string/first_name"
-                    android:textColor="@color/teal_200"
-                    android:textSize="20sp" />
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginBottom="30dp"
-                    android:text="@string/last_name"
-                    android:textColor="@color/teal_200"
-                    android:textSize="20sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 
-            </LinearLayout>
+    <TextView
+        android:id="@+id/text3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/last_name"
+        android:textColor="@color/teal_200"
+        android:textSize="25sp"/>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/linear_last_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:boxBackgroundColor="#edf1f5"
+        app:boxCornerRadiusBottomEnd="4dp"
+        app:boxCornerRadiusBottomStart="4dp"
+        app:boxCornerRadiusTopEnd="4dp"
+        app:boxCornerRadiusTopStart="4dp"
+        android:hint="@string/last_name"
+        android:textColor="@color/white"
+        android:textSize="32sp">
 
-        </RelativeLayout>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/linear_last_name_value"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-        <ImageView
-            android:layout_width="120dp"
-            android:layout_height="123dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/circle"
-            android:padding="3dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/marvel" />
+    </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/create"
+        android:id="@+id/linear_create"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:onClick="create"
+        android:layout_marginTop="30dp"
+        app:backgroundTint="@color/purple_500"
+        android:gravity="center"/>
 
-    </RelativeLayout>
+</LinearLayout>
