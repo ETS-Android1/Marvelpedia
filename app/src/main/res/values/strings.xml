@@ -2,8 +2,9 @@
     <string name="app_name">Marvelpedia</string>
 
     <string name="forgot_pass_button">Damn it! I forgot my pass</string>
-    <string name="login_button">Let's go!</string>
+    <string name="login_button">Let\'s go!</string>
     <string name="password_field">Password</string>
+
     <string name="marvelname">MarvelName</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
@@ -12,4 +13,22 @@
     <string name="first_name">First Name</string>
     <string name="marvel_name">Marvel Name</string>
     <string name="create">CREATE</string>
+
+    <string name="email_field">Email address or username</string>
+    <string name="login_text">Its Login Time!</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+
+
+    <string name="private_API_key">c08d8b1502acba654df4211f076ecee3bd56a380</string>
+    <string name="public_API_key">da311cab234d0c1a1134f345bc99fa2a</string>
+    <string name="base_url">https://gateway.marvel.com</string>
+
 </resources>
