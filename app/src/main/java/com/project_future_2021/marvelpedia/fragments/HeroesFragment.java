@@ -19,11 +19,9 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.FragmentNavigator;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import com.project_future_2021.marvelpedia.R;
 import com.project_future_2021.marvelpedia.data.Hero;
-import com.project_future_2021.marvelpedia.database.HeroRoomDatabase;
 import com.project_future_2021.marvelpedia.recycler_view.MyListAdapter;
 import com.project_future_2021.marvelpedia.singletons.VolleySingleton;
 import com.project_future_2021.marvelpedia.viewmodels.HeroesViewModel;
@@ -44,13 +42,8 @@ public class HeroesFragment extends Fragment {
     private static final String TAG = "HeroesFragment";
     private static final String REQUEST_TAG = "HeroesFragmentRequest";
     private HeroesViewModel heroesViewModel;
-    private HeroRoomDatabase database;
     private MyListAdapter heroesAdapter;
     private RecyclerView recyclerView;
-
-    public static HeroesFragment newInstance() {
-        return new HeroesFragment();
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -60,7 +53,6 @@ public class HeroesFragment extends Fragment {
         //"heroesViewModel" will attach(-live) to the getActivity()(i.e. MainActivity)'s lifecycle.
         // So it will survive HeroesFragment destruction when navigating to other fragments.
         heroesViewModel = new ViewModelProvider(/*this*/requireActivity()).get(HeroesViewModel.class);
-        database = Room.databaseBuilder(requireContext(), HeroRoomDatabase.class, "Marvelpedia").build();
         return inflater.inflate(R.layout.heroes_fragment, container, false);
     }
 
@@ -87,19 +79,11 @@ public class HeroesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Log.d(TAG, "onViewCreated: ");
         // Part 1 of 2.
         /* This is needed, if we want the layout to draw itself only after we are done (e.g. have returned from the DetailsFragment via shared views and transitions.*/
         postponeEnterTransition();
         final ViewGroup parentView = (ViewGroup) view.getParent();
-
-        Log.d(TAG, "onViewCreated: ");
-
-        //heroesViewModel.getHeroesFromDb();
-
-        //String request_type = "/v1/public/characters";
-        //String Url = heroesViewModel.createUrlForApiCall(request_type);
-        //heroesViewModel.getHeroesFromServer(Url, REQUEST_TAG);
 
         recyclerView = view.findViewById(R.id.recyclerView);
         NestedScrollView nestedScrollView = view.findViewById(R.id.heroes_layout);
@@ -109,7 +93,7 @@ public class HeroesFragment extends Fragment {
                 // on scroll change we are checking when users scroll as bottom.
                 if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
                     Log.d(TAG, "onScrollChange: We reached the bottom of the page. Will fetch more data now...");
-                    heroesViewModel.loadMore(/*request_type*/);
+                    heroesViewModel.loadMore();
                 }
             }
         });
@@ -163,7 +147,7 @@ public class HeroesFragment extends Fragment {
         // the list doesn't show when it's recreated (the user swapped fragments etc)
         // so we put it inside to code block too...
         // The onChanged() method fires when the observed data changes and the activity is in the foreground:
-        heroesViewModel.getClAllHeroes().observe(getViewLifecycleOwner(), new Observer<List<Hero>>() {
+        heroesViewModel.getVmAllHeroesCombined().observe(getViewLifecycleOwner(), new Observer<List<Hero>>() {
             @Override
             public void onChanged(List<Hero> heroesList) {
                 heroesAdapter.submitList(heroesList);
@@ -197,13 +181,14 @@ public class HeroesFragment extends Fragment {
 
         // subscribe to and observe to changes happening in the livedata variable named isLoading
         // and, if true, show the progress bar, otherwise hide it.
-        heroesViewModel.isLoading.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        //TODO uncomment here
+        heroesViewModel.getVmIsLoading().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isLoading) {
                 if (isLoading) {
-                    view.findViewById(R.id.progressBarTop).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
                 } else {
-                    view.findViewById(R.id.progressBarTop).setVisibility(View.INVISIBLE);
+                    view.findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -214,8 +199,6 @@ public class HeroesFragment extends Fragment {
     @Override
     public void onDestroyView() {
         Log.d(TAG, "onDestroyView: ");
-
-        //heroesViewModel.saveHeroesToDb();
 
         if (VolleySingleton.getInstance(getContext()) != null) {
             VolleySingleton.getInstance(getContext()).getRequestQueue().cancelAll(REQUEST_TAG);

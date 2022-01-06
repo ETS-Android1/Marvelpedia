@@ -141,6 +141,8 @@ public class Hero implements Parcelable {
         this.name = name;
         this.description = description;
         this.isFavorite = isFavorite;
+        //TODO was added during debug, should probably remove later..
+        this.thumbnail = new Image("emptyPath", "emptyExtension");
     }
 
     public Hero(Integer id, String name, String description, Image thumbnail, Boolean isFavorite) {

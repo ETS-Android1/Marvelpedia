@@ -3,11 +3,11 @@ package com.project_future_2021.marvelpedia.repositories;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -21,8 +21,10 @@ import com.project_future_2021.marvelpedia.data.Image;
 import com.project_future_2021.marvelpedia.data.Series;
 import com.project_future_2021.marvelpedia.data.Stories;
 import com.project_future_2021.marvelpedia.data.Url;
+import com.project_future_2021.marvelpedia.database.AsyncHowManyRecordsInDb;
 import com.project_future_2021.marvelpedia.database.HeroDao;
 import com.project_future_2021.marvelpedia.database.HeroRoomDatabase;
+import com.project_future_2021.marvelpedia.network.HeroApi;
 import com.project_future_2021.marvelpedia.singletons.VolleySingleton;
 
 import org.json.JSONArray;
@@ -34,92 +36,95 @@ import java.util.List;
 
 public class HeroRepository {
     private static final String TAG = "HeroRepository";
-    private HeroDao heroDao;
-    //private LiveData<List<Hero>> allHeroes;
-    private MediatorLiveData<List<Hero>> allHeroes;
-    private LiveData<List<Hero>> allDbHeroes;
+    private static final String REQUEST_TAG = "HeroesFragmentRequest";
 
-    private List<Hero> simpleServerHeroesList = new ArrayList<>();
-    private MutableLiveData<List<Hero>> allServerHeroes;
-
-    //private MutableLiveData<List<Hero>> allRepoFavorites;
-
-    /*LiveData  liveData1 = ...;
-    LiveData  liveData2 = ...;
-
-    MediatorLiveData  liveDataMerger = new MediatorLiveData<>();
-   liveDataMerger.addSource(liveData1, value -> liveDataMerger.setValue(value));
-   liveDataMerger.addSource(liveData2, value -> liveDataMerger.setValue(value));*/
-
-    //private List<Hero> simpleCompleteDbAndServerList = new ArrayList<>();
+    private final HeroDao heroDao;
+    private final HeroApi.TalkWithServer heroApi;
+    // 'repo' for repository
+    private final LiveData<List<Hero>> repoDbHeroes;
+    private final MutableLiveData<List<Hero>> repoServerHeroes;
+    private final List<Hero> simpleRepoServerHeroes = new ArrayList<>();
+    private final MutableLiveData<Boolean> repoIsLoading;
+    // repo counters for offset and limit in our Urls.
+    int repoOffset = -1;
+    int repoLimit = -1;
 
 
-    public MediatorLiveData<List<Hero>> getAllHeroes() {
-        return allHeroes;
-    }
-
-    // Note that in order to unit test the HeroRepository, we have to remove the Application
-    // See the BasicSample in the android-architecture-components repository at
-    // https://github.com/googlesamples
-    public HeroRepository(Application application) {
+    public HeroRepository(Application application, String urlFromViewModel, int offsetFromViewmodel, int limitFromViewmodel) {
+        Log.d(TAG, "HeroRepository: Initiating the Repository...");
+        // init the Database.
         HeroRoomDatabase db = HeroRoomDatabase.getDatabase(application);
+
+        repoIsLoading = new MutableLiveData<>();
+        repoIsLoading.setValue(false);
+
+        repoServerHeroes = new MutableLiveData<>();
+
         heroDao = db.heroDao();
-        //allHeroes = heroDao.getAllHeroes();
+        heroApi = initHeroApi();
 
-        allHeroes = new MediatorLiveData<>();
-
-        allDbHeroes = heroDao.getAllHeroes();
-
-        allServerHeroes = new MutableLiveData<>();
-
-        allHeroes.addSource(allDbHeroes, value -> allHeroes.setValue(value));
-        allHeroes.addSource(allServerHeroes, value -> allHeroes.setValue(value));
-        //allHeroes = new MediatorLiveData<>();
-        //allHeroes = getAllHeroes(application.getBaseContext(), )
-        //allHeroes.setValue(heroDao.getAllHeroes().getValue());
-
-        //allRepoFavorites = new MutableLiveData<>();
-
-    }
-
-    // Room executes all queries on a separate thread.
-    // Observed LiveData will notify the observer when the data has changed.
-    public MediatorLiveData<List<Hero>> getAllHeroes(Context context, String Url, String REQUEST_TAG) {
-        getHeroesFromDb();
-        //allHeroes = heroDao.getAllHeroes();
-        getHeroesFromServer(context, Url, REQUEST_TAG, 5, 5);
-
-        return allHeroes;
-    }
-
-    /*public LiveData<List<Hero>> getDbFavoriteHeroes() {
-        Log.d(TAG, "getDbFavoriteHeroes: Start");
-        ArrayList<Hero> simpleFavorites = new ArrayList<>();
-        Transformations.map(allHeroes, input -> {
-            for (int i = 0; i < input.size(); i++) {
-                Hero temp_hero = input.get(i);
-                if (temp_hero.getFavorite()) {
-                    simpleFavorites.add(temp_hero);
-                    Log.d(TAG, "getDbFavoriteHeroes: Added hero to favorites: " + temp_hero.getName());
+        // check how many Heroes we already have in the db,
+        // if we have more than the offset we got from the ViewModel,
+        //      that means we already have data in the DB,
+        //      and we should re-fetch all these Heroes first, so that the users have up-to-date results.
+        // else
+        //      this is the Users' first time using the App, bring new Heroes starting from 0.
+        new AsyncHowManyRecordsInDb(db, new AsyncHowManyRecordsInDb.Listener() {
+            @Override
+            public void onResult(Integer numberOfHeroesAlreadyInDb) {
+                repoOffset = numberOfHeroesAlreadyInDb;
+                if (repoOffset < offsetFromViewmodel) {
+                    heroApi.getHeroesFromServer(application, urlFromViewModel, REQUEST_TAG, offsetFromViewmodel, limitFromViewmodel);
+                } else {
+                    heroApi.getHeroesFromServer(application, urlFromViewModel, REQUEST_TAG, repoOffset, limitFromViewmodel);
                 }
             }
-            allRepoFavorites.postValue(simpleFavorites);
-            return allRepoFavorites;
-        });
-        Log.d(TAG, "getDbFavoriteHeroes: End");
-        return allRepoFavorites;
-    }*/
+        }).execute();
 
-    private void getHeroesFromDb() {
-        HeroRoomDatabase.databaseWriteExecutor.execute(() -> {
-            heroDao.getAllHeroes();
-        });
+        // our LiveData repoDbHeroes will update every time a change happens in the Database.
+        repoDbHeroes = heroDao.getAllHeroes();
     }
 
-    // returns a value so it's a Callable<Integer>
-    /*final Future<Integer> submit2 = es.submit(() -> counter++);
-    System.out.println(submit2.get());*/
+    public MutableLiveData<Boolean> getRepoIsLoading() {
+        return repoIsLoading;
+    }
 
+    public MutableLiveData<List<Hero>> getRepoServerHeroes() {
+        return repoServerHeroes;
+    }
+
+    public LiveData<List<Hero>> getRepoDbHeroes() {
+        return repoDbHeroes;
+    }
+
+    // heroApi is interface with x-methods. We need to implement these methods here,
+    // so the compiler knows what to do when we call "heroApi.getHeroesFromServer()" or w/e hero.x-method...
+    @NonNull
+    private HeroApi.TalkWithServer initHeroApi() {
+        return new HeroApi.TalkWithServer() {
+            @Override
+            public List<Hero> getHeroesFromServer(Context context, String url, String requestTag, int offset, int limit) {
+
+                return RepoGetHeroesFromServer(context, url, requestTag, offset, limit);
+            }
+
+            @Override
+            public void test() {
+                Log.d(TAG, "test: inside test");
+            }
+        };
+    }
+
+
+    public void RepoLoadMore(Context context, String newUrl, int offset, int limit) {
+        // increase the counter for offset, to load the next batch of data.
+        // [SOS] we HAVE to decrease it if the call fails. We do it inside the RepoGetHeroesFromServer()
+        repoOffset += repoLimit;
+        RepoGetHeroesFromServer(context, newUrl, REQUEST_TAG, repoOffset, limit);
+        Log.d(TAG, "RepoLoadMore: new url is: " + newUrl);
+    }
+
+    //TODO should delete in later push.
     //https://stackoverflow.com/questions/38540481/return-value-by-lambda-in-java
     /*private Hero getHeroFromDWithId(int id) {
         final Future<?> submit2 =
@@ -139,30 +144,22 @@ public class HeroRepository {
         return new Hero();
     }*/
 
-    /*public LiveData<List<Hero>> getAllServerHeroes() {
-        return liveDataServerHeroesList;
-    }*/
+    public List<Hero> RepoGetHeroesFromServer(Context context, String url, String requestTag, int offset, int limit) {
+        repoIsLoading.setValue(true);
 
-    public void getHeroesFromServer(Context context, String url, String requestTag, int offset, int limit) {
-        //isLoading.setValue(true);
-        //JsonObjectRequest jsonObjectRequest;
         Gson gson = new Gson();
 
-        /*if (Objects.equals(getLiveDataHeroesList().getValue(), heroesList)){
-            Log.d(TAG, "getHeroesFromServer: hi there, been here before.");
-            isLoading.setValue(false);
-            return;
-        }*/
+        // if we have a limit!=0 we need to edit the url accordingly.
+        if (limit != 0) {
+            url = url + "&limit=" + limit;
+            repoLimit = limit;
+        }
+        // same goes for offset.
+        if (offset != 0) {
+            url = url + "&offset=" + offset;
+        }
+        Log.d(TAG, "RepoGetHeroesFromServer: called with FINAL url: " + url);
 
-        //getHeroesFromDb();
-
-        // TODO:
-        // not really a fan of this, temporary solutions,
-        // because each call re-adds the same items on our list
-        // for example, if the user swaps fragments...
-        //heroesList.clear();
-        // Instantiate the RequestQueue.
-        //RequestQueue queue = Volley.newRequestQueue(context);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -223,40 +220,26 @@ public class HeroRepository {
                                     temp_hero_urls.add(temp_url);
                                 }
 
-                                /*Hero dbHeroToBeReplaced = */
-                                //getHeroFromDWithId(temp_hero_id);
-                                /*new AsyncGetHeroFromDb(database, new AsyncGetHeroFromDb.Listener() {
-                                    @Override
-                                    public void onResult(Hero resultHero) {
-                                        if (resultHero.getFavorite())
-                                        temp_hero.setFavorite(true);
-                                        heroesList.add(temp_hero);
-                                    }
-                                }).execute(temp_hero_id);*/
-
                                 temp_hero = new Hero(temp_hero_id, temp_hero_name, temp_hero_description, temp_hero_modified, temp_hero_thumbnail, temp_hero_resourceURI, temp_hero_comics, temp_hero_series, temp_hero_stories, temp_hero_events, temp_hero_urls/*, wasHeFavorite[0]*/);
 
                                 // TODO: subject to change, will see.
                                 // Do not re-add items already on the list.
-                                if (simpleServerHeroesList.contains(temp_hero)) {
-                                    //isLoading.setValue(false);
+                                if (simpleRepoServerHeroes.contains(temp_hero)) {
+                                    repoIsLoading.setValue(false);
                                     Log.d(TAG, "onResponse: Did not fetch " + temp_hero_name + " again, no need.");
-                                    //return;
                                     continue;
                                 }
-                                simpleServerHeroesList.add(temp_hero);
+                                simpleRepoServerHeroes.add(temp_hero);
 
                                 Log.d(TAG, "onResponse: just fetched and added hero: " + temp_hero_name + " Favorite?: " + temp_hero.getFavorite());
                             }
-                            allServerHeroes.setValue(simpleServerHeroesList);
-                            //allHeroes.postValue(simpleServerHeroesList);
+                            repoServerHeroes.setValue(simpleRepoServerHeroes);
 
-                            // TODO: SOS, check this again
-                            // save the heroes to DB too
-                            //insertManyHeroes(simpleServerHeroesList);
-                            //isLoading.setValue(false);
+                            repoIsLoading.setValue(false);
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Toast.makeText(context, "Server not responding!\n Try again later.", Toast.LENGTH_LONG).show();
+                            // TODO should we add repoIsLoading.setValue(false); here too?
                             Log.e(TAG, "onResponse: Something went wrong: " + e.getMessage());
                         }
                         Log.d(TAG, "onResponse: I arrived!");
@@ -269,7 +252,14 @@ public class HeroRepository {
                         // TODO: comment or uncomment next line,
                         //  we should decide if the user should or should not see the progress bar constantly loading.
                         //isLoading.setValue(false);
-                        //Toast.makeText(getApplication().getBaseContext(), "Something went wrong " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+                        // [SOS]
+                        // undo our previous action of increasing the counter by {limit amount},
+                        // because we are offline and we did not fetch the next batch of Heroes.
+                        // This is really important for the overall UX.
+                        repoOffset -= limit;
+                        Toast.makeText(context, "You are in offline mode \n" +
+                                "check network or try again later.", Toast.LENGTH_LONG).show();
                         Log.e(TAG, "onErrorResponse: Something went wrong with the server call: " + error.getMessage());
                     }
                 });
@@ -278,10 +268,11 @@ public class HeroRepository {
 
         // Add the request to the RequestQueue.
         VolleySingleton.getInstance(context).addToRequestQueue(jsonObjectRequest);
-        //return jsonObjectRequest;
+
+        return simpleRepoServerHeroes;
     }
 
-    // We must call this on a non-UI thread or our app will throw an exception. Room ensures
+    // We must call these Database-calls on a non-UI thread or our app will throw an exception. Room ensures
     // that we're not doing any long running operations on the main thread, blocking the UI.
     public void insert(Hero hero) {
         HeroRoomDatabase.databaseWriteExecutor.execute(() -> {
@@ -300,21 +291,4 @@ public class HeroRepository {
             heroDao.deleteAllHeroes();
         });
     }
-
-    /*public MutableLiveData<List<Hero>> getAllFavoriteHeroes() {
-        List<Hero> temp = allDbHeroes.getValue();
-        ArrayList<Hero> temp2 = new ArrayList<>();
-        MutableLiveData<List<Hero>> temp_fav_list = new MutableLiveData<>();
-        if (temp != null) {
-            for (Hero hero : temp) {
-                if (hero.getFavorite()) {
-                    temp2.add(hero);
-                    Log.d(TAG, "getAllFavoriteHeroes: Hero " + hero.getName() + " was favorite from DB");
-                }
-            }
-            temp_fav_list.setValue(temp2);
-            return temp_fav_list;
-        }
-        return null;
-    }*/
 }

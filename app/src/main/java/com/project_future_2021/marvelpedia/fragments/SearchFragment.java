@@ -75,7 +75,7 @@ public class SearchFragment extends Fragment {
         //Hero temp_hero2 = thirdHeroesViewModel.getClAllHeroes();
 
         final String[] temp_text = {""};
-        thirdHeroesViewModel.getClAllHeroes().observe(getViewLifecycleOwner(), new Observer<List<Hero>>() {
+        thirdHeroesViewModel.getVmAllHeroesCombined().observe(getViewLifecycleOwner(), new Observer<List<Hero>>() {
             @Override
             public void onChanged(List<Hero> heroes) {
                 temp_text[0] = "";
@@ -112,7 +112,7 @@ public class SearchFragment extends Fragment {
                     }
                 }).execute(thirdHeroesViewModel.getLiveDataHeroesList().getValue());*/
                 //thirdHeroesViewModel.clInsert(temp_hero);
-                thirdHeroesViewModel.clInsertManyHeroes(thirdHeroesViewModel.getClAllHeroes().getValue());
+                thirdHeroesViewModel.insertManyHeroes(thirdHeroesViewModel.getVmAllHeroesCombined().getValue());
             }
         });
 
@@ -129,7 +129,7 @@ public class SearchFragment extends Fragment {
                         }
                     }
                 }).execute();*/
-                thirdHeroesViewModel.clDeleteAllHeroes();
+                thirdHeroesViewModel.deleteAllHeroes();
             }
         });
 

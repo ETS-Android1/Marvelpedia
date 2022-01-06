@@ -14,11 +14,13 @@ import java.util.List;
 @Dao
 public interface HeroDao {
 
-    /*@Query("SELECT * FROM heroes_table ORDER BY name ASC")
-    LiveData<List<Hero>> getAllHeroes();*/
-
-    @Query("SELECT * FROM heroes_table")
+    @Query("SELECT * FROM heroes_table ORDER BY name ASC")
     LiveData<List<Hero>> getAllHeroes();
+
+    /*@Query("SELECT * FROM heroes_table")
+    LiveData<List<Hero>> getAllHeroes();*/
+    @Query("SELECT COUNT (id) FROM heroes_table")
+    Integer howManyHeroes();
 
     @Query("SELECT * FROM heroes_table WHERE id=(:heroId) ")
     Hero getHeroWithId(int heroId);

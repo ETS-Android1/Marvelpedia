@@ -13,7 +13,7 @@ public class ImageConverter {
     @TypeConverter
     public static Image stringToImage(String dbRepresentation) {
         if (dbRepresentation == null) {
-            Log.d(TAG, "Converting stringToImage: dbRepresentation was null.");
+            //Log.d(TAG, "Converting stringToImage: dbRepresentation was null.");
             return null;
         } else {
             String[] parts = dbRepresentation.split(SEPARATOR);
@@ -21,7 +21,7 @@ public class ImageConverter {
             String extension = parts[1];
             String variant = parts[2];
             Image resultImage = new Image(path, extension, variant);
-            Log.d(TAG, "Converting stringToImage: " + resultImage.toString());
+            //Log.d(TAG, "Converting stringToImage: " + resultImage.toString());
             return resultImage;
         }
     }
