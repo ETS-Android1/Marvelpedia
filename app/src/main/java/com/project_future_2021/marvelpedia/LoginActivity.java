@@ -6,19 +6,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.project_future_2021.marvelpedia.fragments.RegisterBottomSheetFragment;
 
 public class LoginActivity extends AppCompatActivity {
 
     private Button button;
+    private Button regButton;
     private TextInputEditText username;
     private TextInputEditText password;
-
-    String inputUsername = "";
-    String inputPassword = "";
 
     private String UserData = "test";
     private String PassData = "test";
@@ -30,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        username = findViewById(R.id.login_password_value);
+        username = findViewById(R.id.login_username_value);
         password = findViewById(R.id.login_password_value);
 
         button = findViewById(R.id.login_button);
@@ -38,8 +36,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                inputUsername = username.getText().toString();
-                inputPassword = password.getText().toString();
+                String inputUsername = username.getText().toString();
+                String inputPassword = password.getText().toString();
 
                 if(inputUsername.isEmpty() || inputPassword.isEmpty())
                 {
@@ -68,6 +66,18 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+
+        regButton = findViewById(R.id.register_account);
+        regButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        RegisterBottomSheetFragment bottomSheet = new RegisterBottomSheetFragment();
+                        bottomSheet.show(getSupportFragmentManager(),
+                                "ModalBottomSheet");
+                    }
+                });
+
     }
 
     public void openMainActivity(){

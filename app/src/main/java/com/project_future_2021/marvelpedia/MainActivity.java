@@ -33,8 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
         initBottomNavigation();
 
-        //setContentView(R.layout.login_fragment);
-        //LoginViewModel viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
     }
 
 

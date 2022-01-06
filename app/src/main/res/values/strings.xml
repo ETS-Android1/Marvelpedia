@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Marvelpedia</string>
 
-    <string name="register_button">Sign Up! It\'s Free! (for now)</string>
+    <string name="register_button">Register! It\'s Free! (for now)</string>
     <string name="login_button">Let\'s go!</string>
     <string name="password_field">Password</string>
-    <string name="email_field">Email address or username</string>
+    <string name="email_field">Username</string>
     <string name="login_text">It\'s Login Time!</string>
 
 
