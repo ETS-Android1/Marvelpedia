@@ -1,6 +1,8 @@
 package com.project_future_2021.marvelpedia.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,15 +25,14 @@ public class RegisterBottomSheetFragment extends BottomSheetDialogFragment {
     private TextInputEditText registerPassword;
     private TextInputEditText confirmPassword;
     private Button button;
+    SharedPreferences sp;
 
     public RegisterBottomSheetFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState);}
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -42,12 +43,21 @@ public class RegisterBottomSheetFragment extends BottomSheetDialogFragment {
         confirmPassword = view.findViewById(R.id.confirm_password_value);
         button = view.findViewById(R.id.register_button);
 
+        sp = getActivity().getSharedPreferences("RegisterPrefs", Context.MODE_PRIVATE);
+
+        //What happens when the "Register" button is pressed
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String checkUsername = registerUsername.getText().toString();
                 String checkFirstPassword = registerPassword.getText().toString();
                 String checkSecondPassword = confirmPassword.getText().toString();
+
+                //Saving data from registration
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString("registerUsername",checkUsername);
+                editor.putString("registerPassword",checkFirstPassword);
+                editor.commit();
 
                 if (checkUsername.isEmpty() || checkFirstPassword.isEmpty() || checkSecondPassword.isEmpty()) {
                     Toast.makeText(getActivity(), "Info are missing", Toast.LENGTH_SHORT).show();
@@ -83,6 +93,7 @@ public class RegisterBottomSheetFragment extends BottomSheetDialogFragment {
     private void openMainActivity() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
+        requireActivity().onBackPressed();
     }
 
 

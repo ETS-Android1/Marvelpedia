@@ -1,6 +1,8 @@
 package com.project_future_2021.marvelpedia;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,8 +20,6 @@ public class LoginActivity extends AppCompatActivity {
     private Button regButton;
     private TextInputEditText username;
     private TextInputEditText password;
-    private final String UserData = "test";
-    private final String PassData = "test";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         username = findViewById(R.id.login_username_value);
         password = findViewById(R.id.login_password_value);
 
+        //Actions that happen when the "Let's go" button is pressed
         button = findViewById(R.id.login_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Info are missing", Toast.LENGTH_SHORT).show();
                 } else {
 
+                    //Validation method is called
                     isValid = validate(inputUsername, inputPassword);
 
                     if (!isValid) {
@@ -53,7 +55,6 @@ public class LoginActivity extends AppCompatActivity {
 
                         openMainActivity();
 
-                        finish();
 
                     }
 
@@ -63,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        //Bottom Sheet fragment of registration is called
         regButton = findViewById(R.id.register_account);
         regButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,20 +77,27 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    //Calls main activity
     public void openMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
+
 
     }
 
+    //Validates data
     private boolean validate(String inputUsername, String inputPassword) {
 
-        //TODO commented this to skip validation, for now..
-        /*if(inputUsername.equals(UserData) && inputPassword.equals(PassData)){
+        SharedPreferences sp = getApplicationContext().getSharedPreferences("RegisterPrefs", Context.MODE_PRIVATE);
+        String registerUsername = sp.getString("registerUsername","");
+        String registerPassword = sp.getString("registerPassword","");
+
+
+        if(inputUsername.equals(registerUsername) && inputPassword.equals(registerPassword)){
             return true;
         }
-            return false;*/
-        return true;
+            return false;
 
     }
 }
