@@ -21,7 +21,7 @@ public class AsyncHowManyRecordsInDb extends AsyncTask<Void, Void, Integer> {
         try {
             return heroRoomDatabase.heroDao().howManyHeroes();
         } catch (Exception e) {
-            return -1;
+            return 0;
         }
     }
 

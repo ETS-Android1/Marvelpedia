@@ -21,6 +21,7 @@ import com.project_future_2021.marvelpedia.data.Image;
 import com.project_future_2021.marvelpedia.data.Series;
 import com.project_future_2021.marvelpedia.data.Stories;
 import com.project_future_2021.marvelpedia.data.Url;
+import com.project_future_2021.marvelpedia.database.AsyncGetHeroFromDb;
 import com.project_future_2021.marvelpedia.database.AsyncHowManyRecordsInDb;
 import com.project_future_2021.marvelpedia.database.HeroDao;
 import com.project_future_2021.marvelpedia.database.HeroRoomDatabase;
@@ -37,7 +38,6 @@ import java.util.List;
 public class HeroRepository {
     private static final String TAG = "HeroRepository";
     private static final String REQUEST_TAG = "HeroesFragmentRequest";
-
     private final HeroDao heroDao;
     private final HeroApi.TalkWithServer heroApi;
     // 'repo' for repository
@@ -45,17 +45,21 @@ public class HeroRepository {
     private final MutableLiveData<List<Hero>> repoServerHeroes;
     private final List<Hero> simpleRepoServerHeroes = new ArrayList<>();
     private final MutableLiveData<Boolean> repoIsLoading;
-    // repo counters for offset and limit in our Urls.
-    int repoOffset = -1;
-    int repoLimit = -1;
-
     private final MutableLiveData<List<Hero>> repoListOfHeroesTheUserSearchedFor;
 
+    HeroRoomDatabase db;
+    // repo counters for offset and limit in our Urls.
+    // limit and offset are both (optional) parameters in the url we use to access the Server.
+    int repoOffset = 0;
+    int repoLimit = 0;
+    int dataBatchSize = 6;
+    int numberOfHeroesInDb = 0;
 
-    public HeroRepository(Application application, String urlFromViewModel, int offsetFromViewmodel, int limitFromViewmodel) {
+
+    public HeroRepository(Application application, String urlFromViewModel/*, int offsetFromViewmodel, int limitFromViewmodel*/) {
         Log.d(TAG, "HeroRepository: Initiating the Repository...");
         // init the Database.
-        HeroRoomDatabase db = HeroRoomDatabase.getDatabase(application);
+        db = HeroRoomDatabase.getDatabase(application);
 
         repoIsLoading = new MutableLiveData<>();
         repoIsLoading.setValue(false);
@@ -75,12 +79,23 @@ public class HeroRepository {
         //      this is the Users' first time using the App, bring new Heroes starting from 0.
         new AsyncHowManyRecordsInDb(db, new AsyncHowManyRecordsInDb.Listener() {
             @Override
-            public void onResult(Integer numberOfHeroesAlreadyInDb) {
-                repoOffset = numberOfHeroesAlreadyInDb;
-                if (repoOffset < offsetFromViewmodel) {
-                    heroApi.getHeroesFromServer(application, urlFromViewModel, REQUEST_TAG, offsetFromViewmodel, limitFromViewmodel);
+            public void onResult(Integer resultNumberOfHeroesAlreadyInDb) {
+                repoOffset = resultNumberOfHeroesAlreadyInDb;
+                numberOfHeroesInDb = resultNumberOfHeroesAlreadyInDb;
+
+                // the server does not allow us to request more than 100 items per call.
+                if (resultNumberOfHeroesAlreadyInDb == 0) {
+                    repoOffset = 0;
+                    repoLimit = dataBatchSize;
+                    heroApi.getHeroesFromServer(application, urlFromViewModel, REQUEST_TAG, repoOffset, repoLimit);
+                } else if (resultNumberOfHeroesAlreadyInDb <= 100) {
+                    repoOffset = 0;
+                    repoLimit = resultNumberOfHeroesAlreadyInDb;
+                    heroApi.getHeroesFromServer(application, urlFromViewModel, REQUEST_TAG, repoOffset, repoLimit);
                 } else {
-                    heroApi.getHeroesFromServer(application, urlFromViewModel, REQUEST_TAG, repoOffset, limitFromViewmodel);
+                    repoOffset = resultNumberOfHeroesAlreadyInDb;
+                    repoLimit = dataBatchSize;
+                    heroApi.getHeroesFromServer(application, urlFromViewModel, REQUEST_TAG, repoOffset, repoLimit);
                 }
             }
         }).execute();
@@ -128,12 +143,15 @@ public class HeroRepository {
     }
 
 
-    public void RepoLoadMore(Context context, String newUrl, int offset, int limit) {
+    public void RepoLoadMore(Context context, String newUrl/*, int offset, int limit*/) {
         // increase the counter for offset, to load the next batch of data.
         // [SOS] we HAVE to decrease it if the call fails. We do it inside the RepoGetHeroesFromServer()
         repoOffset += repoLimit;
-        RepoGetHeroesFromServer(context, newUrl, REQUEST_TAG, repoOffset, limit);
-        Log.d(TAG, "RepoLoadMore: new url is: " + newUrl);
+        repoLimit = dataBatchSize;
+        /*repoOffset += limit;
+        repoLimit = limit;*/
+        RepoGetHeroesFromServer(context, newUrl, REQUEST_TAG, repoOffset, repoLimit);
+        Log.d(TAG, "RepoLoadMore: new Url is: " + newUrl + " New repoOffset is: " + repoOffset + " and new repoLimit is: " + repoLimit);
     }
 
     //TODO should delete in later push.
@@ -164,7 +182,7 @@ public class HeroRepository {
         // if we have a limit!=0 we need to edit the url accordingly.
         if (limit != 0) {
             url = url + "&limit=" + limit;
-            repoLimit = limit;
+            //repoLimit = limit;
         }
         // same goes for offset.
         if (offset != 0) {
@@ -232,7 +250,35 @@ public class HeroRepository {
                                     temp_hero_urls.add(temp_url);
                                 }
 
-                                temp_hero = new Hero(temp_hero_id, temp_hero_name, temp_hero_description, temp_hero_modified, temp_hero_thumbnail, temp_hero_resourceURI, temp_hero_comics, temp_hero_series, temp_hero_stories, temp_hero_events, temp_hero_urls/*, wasHeFavorite[0]*/);
+                                final boolean[] temp_hero_favorite = new boolean[1];
+
+                                // We need to check if this Hero was Favorite or not.
+                                // If he was, yes get the up-to-date data from the server from him,
+                                // but also make him favorite again.
+                                new AsyncGetHeroFromDb(db, new AsyncGetHeroFromDb.Listener() {
+                                    @Override
+                                    public void onResult(Hero resultHero) {
+                                        //
+                                        if (resultHero != null && resultHero.getFavorite()) {
+                                            temp_hero_favorite[0] = true;
+                                            resultHero.setFavorite(true);
+                                            // Part 1 of 2 of 'why we must update our 'simple' list of Heroes AS WELL AS our DataBase'
+                                            // The code in here will be executed after the Hero has been already added to the list with isFavorite default value of false,
+                                            // so we need to take that into consideration and when the actual value arrives, update him in the list as well.
+                                            // So, inside of update(Hero hero) we remove and add him again with the correct value.
+                                            update(resultHero);
+                                            Log.d(TAG, "onResult-AsyncGetHeroFromDb: For " + resultHero.getName());
+                                        }
+                                    }
+                                }).execute(temp_hero_id);
+
+                                // temp_hero_favorite[0] will always be false at first,
+                                // because until it is updated with the correct value, depending on if the Hero was favorite or not
+                                // that answer will be returned from different thread at later point of time!
+                                temp_hero = new Hero(temp_hero_id, temp_hero_name, temp_hero_description,
+                                        temp_hero_modified, temp_hero_thumbnail, temp_hero_resourceURI, temp_hero_comics,
+                                        temp_hero_series, temp_hero_stories, temp_hero_events, temp_hero_urls,
+                                        temp_hero_favorite[0]);
 
                                 // TODO: subject to change, will see.
                                 // Do not re-add items already on the list.
@@ -245,7 +291,13 @@ public class HeroRepository {
 
                                 Log.d(TAG, "onResponse: just fetched and added hero: " + temp_hero_name + " Favorite?: " + temp_hero.getFavorite());
                             }
-                            repoServerHeroes.setValue(simpleRepoServerHeroes);
+                            // Part 1 of 2 of 'fallback-in-case-network-failure' scenario
+                            // We increase our fallback-in-case-network-fails variable(numberOfHeroesInDb) by dataBatchSize amount
+                            // so we know up to how many heroes we have successfully fetched.
+                            // (part 2 is in onErrorResponse)
+                            numberOfHeroesInDb += dataBatchSize;
+
+                            repoServerHeroes.postValue(simpleRepoServerHeroes);
 
                             repoIsLoading.setValue(false);
                         } catch (JSONException e) {
@@ -265,11 +317,18 @@ public class HeroRepository {
                         //  we should decide if the user should or should not see the progress bar constantly loading.
                         //isLoading.setValue(false);
 
+                        // Part 2 of 2 of 'fallback-in-case-network-failure' scenario
+                        //
                         // [SOS]
-                        // undo our previous action of increasing the counter by {limit amount},
-                        // because we are offline and we did not fetch the next batch of Heroes.
+                        // Bring back our 'pointer to the last fetched hero' to numberOfHeroesInDb, and also
+                        // undo our previous action of increasing the counter by {dataBatchSize},
+                        // because we are offline and we did not successfully fetch the next batch of Heroes.
+                        // So the next time we try to fetch the next batch of heroes,
+                        // we pick up/continue from the last point we were successfully able to.
                         // This is really important for the overall UX.
-                        repoOffset -= limit;
+                        repoOffset = numberOfHeroesInDb;
+                        //repoOffset -= limit;
+                        repoOffset -= dataBatchSize;
                         Toast.makeText(context, "You are in offline mode \n" +
                                 "check network or try again later.", Toast.LENGTH_LONG).show();
                         Log.e(TAG, "onErrorResponse: Something went wrong with the server call: " + error.getMessage());
@@ -393,9 +452,40 @@ public class HeroRepository {
         });
     }
 
+    public void update(Hero hero) {
+        // Part 2 of 2 of 'why we must update our 'simple' list of Heroes AS WELL AS our DataBase'
+        // Our 'simple' (i.e. not LiveData) list with heroes must be updated as well,
+        // because it should reflect the current status of our liveData list.
+        simpleRepoServerHeroes.remove(hero);
+        simpleRepoServerHeroes.add(hero);
+        HeroRoomDatabase.databaseWriteExecutor.execute(() -> {
+            heroDao.updateHero(hero);
+        });
+    }
+
     public void deleteAllHeroes() {
         HeroRoomDatabase.databaseWriteExecutor.execute(() -> {
             heroDao.deleteAllHeroes();
         });
+    }
+
+
+    public boolean wasHeFavorite(int heroId) {
+        //Log.d(TAG, "wasHeFavorite:Start ");
+        final boolean[] result = new boolean[1];
+        new AsyncGetHeroFromDb(db, new AsyncGetHeroFromDb.Listener() {
+            @Override
+            public void onResult(Hero resultHero) {
+                //Log.d(TAG, "wasHeFavorite-onResult:Start ");
+                if (resultHero != null) {
+                    result[0] = resultHero.getFavorite();
+                    resultHero.setFavorite(result[0]);
+                    update(resultHero);
+                }
+                //Log.d(TAG, "wasHeFavorite-onResult:End ");
+            }
+        }).execute(heroId);
+        //Log.d(TAG, "wasHeFavorite: Before return");
+        return result[0];
     }
 }

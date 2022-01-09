@@ -34,9 +34,6 @@ public class SearchFragment extends Fragment {
     private MyListAdapter searchAdapter;
     private EditText userInputForHeroName;
 
-    /*@Nullable
-    private HeroRoomDatabase database;*/
-
     public static SearchFragment newInstance() {
         return new SearchFragment();
     }
@@ -68,6 +65,11 @@ public class SearchFragment extends Fragment {
             public void onClick(View v, Hero data) {
                 // What happens when people press on items(heroes) of the recycler view.
             }
+
+            @Override
+            public void onFavoritePressed(View v, Hero data, int position) {
+
+            }
         });
         recyclerView.setAdapter(searchAdapter);
 
@@ -90,7 +92,13 @@ public class SearchFragment extends Fragment {
             }
         });
 
-
+        Button btnDelete = view.findViewById(R.id.btnDelete);
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                thirdHeroesViewModel.deleteAllHeroes();
+            }
+        });
         // ignore these...
         /*final String[] answer = {""};
         TextView textFeedback = view.findViewById(R.id.textFeedback);
