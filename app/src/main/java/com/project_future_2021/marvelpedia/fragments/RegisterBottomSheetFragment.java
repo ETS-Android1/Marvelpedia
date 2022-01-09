@@ -65,6 +65,7 @@ public class RegisterBottomSheetFragment extends BottomSheetDialogFragment {
                 //Saving data from registration
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString("registerUsername", checkUsername);
+                editor.putString("registerEmail", checkEmail);
                 editor.putString("registerPassword", checkFirstPassword);
                 editor.commit();
 

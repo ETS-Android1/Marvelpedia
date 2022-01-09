@@ -91,10 +91,11 @@ public class LoginActivity extends AppCompatActivity {
 
         SharedPreferences sp = getApplicationContext().getSharedPreferences("RegisterPrefs", Context.MODE_PRIVATE);
         String registerUsername = sp.getString("registerUsername","");
+        String registerEmail = sp.getString("registerEmail","");
         String registerPassword = sp.getString("registerPassword","");
 
 
-        if(inputUsername.equals(registerUsername) && inputPassword.equals(registerPassword)){
+        if((inputUsername.equals(registerUsername) || inputUsername.equals(registerEmail))&& inputPassword.equals(registerPassword)){
             return true;
         }
             return false;
