@@ -35,13 +35,16 @@ public interface HeroDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertHero(Hero hero);
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateHeroes(Hero... heroes);
     // Room uses the primary key to match passed entity instances to rows in the database.
     // If there is no row with the same primary key, Room makes no changes.
     // An @Update method can optionally return an int value
     // indicating the number of rows that were updated successfully.
     //public int updateHeroes(Hero... heroes);
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    int updateHero(Hero hero);
 
     @Query("DELETE FROM heroes_table")
     void deleteAllHeroes();

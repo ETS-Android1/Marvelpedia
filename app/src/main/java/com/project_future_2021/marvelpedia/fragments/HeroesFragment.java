@@ -1,6 +1,5 @@
 package com.project_future_2021.marvelpedia.fragments;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -28,14 +26,6 @@ import com.project_future_2021.marvelpedia.viewmodels.HeroesViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-
-// TODO s:
-// Refactor viewmodel and repo to human...
-// Load more does not work properly
-// Change loadFromServer to not bring context into repository
-// Favorites don't work.
-//      serverList overrides dbList (good)
-//      but also its favorites too(by default they all are un-favorite) (bad)
 
 public class HeroesFragment extends Fragment {
 
@@ -75,7 +65,8 @@ public class HeroesFragment extends Fragment {
         //MaterialFadeThrough exitTransition = new MaterialFadeThrough();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    //TODO needed or not???
+    //@RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -121,8 +112,8 @@ public class HeroesFragment extends Fragment {
         heroesAdapter = new MyListAdapter(new MyListAdapter.HeroDiff(), new ArrayList<>(), new MyListAdapter.myClickListener() {
             @Override
             public void onClick(View v, Hero data) {
-                //Toast.makeText(getContext(), "O " + data.getName() + "favorite = " + data.getFavorite(), Toast.LENGTH_SHORT).show();
                 // goto Details (following instructions specified in nav_graph.xml
+                Log.d(TAG, "onClick: pressed on somewhere of " + data.getName());
                 NavDirections action = HeroesFragmentDirections.actionHeroesFragmentToDetailsFragment(data);
 
                 FragmentNavigator.Extras.Builder extrasBuilder = new FragmentNavigator.Extras.Builder();
@@ -135,13 +126,37 @@ public class HeroesFragment extends Fragment {
                 Navigation.findNavController(view).navigate(action, extrasBuilder.build());
                 Log.d(TAG, "onClick: Navigating to DetailsFragment with Hero pressed: " + data.getName());
             }
+
+            @Override
+            public void onFavoritePressed(View v, Hero heroSelected, int position) {
+                Log.d(TAG, "onClick: pressed on favorite of " + heroSelected.getName());
+                // if Hero was favorite, make him un-favorite.
+                if (heroSelected.getFavorite()) {
+                    heroSelected.setFavorite(false);
+                    heroesViewModel.updateHero(heroSelected);
+                    // TODO here or in the Adapter?
+                    heroesAdapter.notifyItemChanged(position);
+                    //heroesAdapter.notifyDataSetChanged();
+                    Log.d(TAG, "onFavoritePressed: He was favorite, now he is not.");
+                }
+                // if he wasn't favorite, make him favorite.
+                else {
+                    heroSelected.setFavorite(true);
+                    heroesViewModel.updateHero(heroSelected);
+                    // TODO here or in the Adapter?
+                    heroesAdapter.notifyItemChanged(position);
+                    //heroesAdapter.notifyDataSetChanged();
+                    Log.d(TAG, "onFavoritePressed: He was NOT favorite, but he is now.");
+                }
+//                heroesAdapter.notifyDataSetChanged();
+            }
         });
         // That should -THEORETICALLY- scroll to the last position of the RecyclerView, but...
         heroesAdapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
         //recyclerView.setAdapter(heroesAdapter);
 
 
-        //recyclerView.setAdapter(heroesAdapter);
+        recyclerView.setAdapter(heroesAdapter);
         // TODO: probably wrong, but why does it not work as it should??
         // If we put "recyclerView.setAdapter(heroesAdapter);" only before or after the "observe the list code",
         // the list doesn't show when it's recreated (the user swapped fragments etc)
@@ -151,7 +166,7 @@ public class HeroesFragment extends Fragment {
             @Override
             public void onChanged(List<Hero> heroesList) {
                 heroesAdapter.submitList(heroesList);
-                recyclerView.setAdapter(heroesAdapter);
+                //recyclerView.setAdapter(heroesAdapter);
 
                 // Part 2 of 2.
                 /* This is needed, if we want the layout to draw itself after we are done*/
@@ -169,7 +184,7 @@ public class HeroesFragment extends Fragment {
                         });
                 //TODO: go here https://stackoverflow.com/questions/53614436/how-to-implement-shared-transition-element-from-recyclerview-item-to-fragment-wi
                 //runLayoutAnimation(recyclerView);
-                Log.d(TAG, "onChanged: new heroesList is:" + heroesList);
+                //Log.d(TAG, "onChanged: new heroesList is:" + heroesList);
                 for (Hero hero : heroesList) {
                     Log.d(TAG, "onChanged: Hero " + hero.getName() + " is favorite? " + hero.getFavorite());
                 }

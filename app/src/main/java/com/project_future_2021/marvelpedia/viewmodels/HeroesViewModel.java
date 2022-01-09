@@ -33,16 +33,12 @@ public class HeroesViewModel extends AndroidViewModel {
 
     private final MutableLiveData<List<Hero>> vmListOfHeroesTheUserSearchedFor;
 
-    // limit and offset are both (optional) parameters in the url we use to access the Server.
-    // limit also, logically, works as the starting offset (if 0 data in DB).
-    private final int vmLimit = 6;
     private final MutableLiveData<Boolean> vmIsLoading;
     private final String vmUrl;
     private final String request_type = "/v1/public/characters";
     // TODO change this, according to Server's Api Instructions
     private final String request_type_for_search = "/v1/public/characters";
     private final String urlForSearch;
-    private int vmOffset = 0;
 
     public HeroesViewModel(@NonNull Application application) {
         super(application);
@@ -55,7 +51,7 @@ public class HeroesViewModel extends AndroidViewModel {
         urlForSearch = createUrlForApiCall(request_type_for_search);
 
 
-        heroRepository = new HeroRepository(application, vmUrl, vmOffset, vmLimit);
+        heroRepository = new HeroRepository(application, vmUrl);
 
         vmAllHeroesCombined = new MediatorLiveData<>();
 
@@ -121,6 +117,13 @@ public class HeroesViewModel extends AndroidViewModel {
         heroRepository.insertManyHeroes(heroes);
     }
 
+    public void updateHero(Hero hero) {
+        // heroRepository.update(hero); <- That 'simple' approach could lead to bugs.
+        // TODO maybe comment/uncomment that, but it is considered better practice. (?)
+        Hero copyOfInputHero = Hero.copyHero(hero);
+        heroRepository.update(copyOfInputHero);
+    }
+
     public void deleteAllHeroes() {
         heroRepository.deleteAllHeroes();
     }
@@ -149,12 +152,9 @@ public class HeroesViewModel extends AndroidViewModel {
     }
 
     public void loadMore() {
-        // We want the next batch of data, so increase the offset.
-        vmOffset += vmLimit;
-
+        // We want the next batch of data
         String newUrl = createUrlForApiCall(request_type);
-        heroRepository.RepoLoadMore(getApplication().getBaseContext(), newUrl, vmOffset, vmLimit);
-        Log.d(TAG, "loadMore: new Url is: " + newUrl);
+        heroRepository.RepoLoadMore(getApplication().getBaseContext(), newUrl);
     }
 
     private String getNow() {
