@@ -28,7 +28,6 @@ public class ProfileFragment extends Fragment {
     private TextInputEditText lastname;
     private TextInputEditText email;
     private TextInputEditText marvelname;
-    private Image image;
     private Button btnShare;
 
     public static ProfileFragment newInstance() {
