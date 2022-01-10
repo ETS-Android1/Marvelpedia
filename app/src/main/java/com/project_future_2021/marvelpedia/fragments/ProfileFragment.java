@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.transition.MaterialFadeThrough;
 import com.project_future_2021.marvelpedia.R;
 import com.project_future_2021.marvelpedia.viewmodels.ProfileViewModel;
 
@@ -95,8 +94,8 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Button editbutton = (Button) findViewById(R.id.linear_edit);
-        Button btnShare = (Button) findViewById(R.id.btnShare);
+        editbutton = (Button) findViewById(R.id.linear_edit);
+        btnShare = (Button) findViewById(R.id.btnShare);
 
         editbutton.setOnClickListener(new View.OnClickListener() {
             @Override
