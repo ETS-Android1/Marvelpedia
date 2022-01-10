@@ -142,8 +142,13 @@ public class ProfileFragment extends Fragment {
                 profile_txt.setText(s);
             }
         });
+
         ImageView image = view.findViewById(R.id.imageView2);
+
         Glide.with(this)
                 .load(R.drawable.gif1)
                 .into(image);*/
+
+
+
 
