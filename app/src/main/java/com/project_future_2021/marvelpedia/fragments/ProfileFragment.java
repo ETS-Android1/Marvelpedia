@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.project_future_2021.marvelpedia.R;
 import com.project_future_2021.marvelpedia.viewmodels.ProfileViewModel;
 
@@ -22,13 +23,13 @@ public class ProfileFragment extends Fragment {
 
     private static final String TAG = "ProfileFragment";
     private ProfileViewModel profileViewModel;
-    private TextView name;
-    private TextView inputName;
-    private TextView email;
-    private TextView inputEmail;
-    private TextView username;
-    private TextView inputUsername;
-    private Button btnSave;
+    private Button editbutton;
+    private TextInputEditText firstname;
+    private TextInputEditText lastname;
+    private TextInputEditText email;
+    private TextInputEditText marvelname;
+    private Button btnShare;
+    private Bundle savedInstanceState;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -44,17 +45,31 @@ public class ProfileFragment extends Fragment {
 
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view,@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        viewInitializations();
+        viewInitializations(view);
     }
 
-    void viewInitializations() {
-        firstname = findViewById(R.id.linear_first_name);
-        email = findViewById(R.id.linear_email);
-        lastname = findViewById(R.id.linear_last_name);
-        marvelname = findViewById(R.id.linear_marvel_name);
+    void viewInitializations(View view) {
+        firstname = view.findViewById(R.id.linear_first_name_value);
+        email = view.findViewById(R.id.linear_email_value);
+        marvelname = view.findViewById(R.id.linear_marvel_name_value);
+        editbutton = view.findViewById(R.id.linear_edit);
+        btnShare =  view.findViewById(R.id.btnShare);
+
+        editbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(requireActivity(), "Edit", Toast.LENGTH_LONG).show();
+            }
+        });
+        btnShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(requireActivity(), "Share", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 
@@ -68,10 +83,7 @@ public class ProfileFragment extends Fragment {
             email.setError("Please Enter Email");
             return false;
         }
-        if (lastname.getText().toString().equals("")) {
-            lastname.setError("Please Enter Last Name");
-            return false;
-        }
+
         if (marvelname.getText().toString().equals("")) {
             marvelname.setError("Please Enter Marvel Name");
             return false;
@@ -82,6 +94,7 @@ public class ProfileFragment extends Fragment {
             return false;
         }
         return true;
+
     }
 
     boolean isemailValid(String email) {
