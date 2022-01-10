@@ -1,6 +1,5 @@
 package com.project_future_2021.marvelpedia.fragments;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -29,6 +28,7 @@ public class ProfileFragment extends Fragment {
     private TextInputEditText email;
     private TextInputEditText marvelname;
     private Button btnShare;
+    private Bundle savedInstanceState;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -42,10 +42,10 @@ public class ProfileFragment extends Fragment {
         return inflater.inflate(R.layout.profile_fragment, container, false);
     }
 
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view,@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.profile_fragment);
 
         viewInitializations();
     }
@@ -58,8 +58,9 @@ public class ProfileFragment extends Fragment {
     }
 
     private TextInputEditText findViewById(int linear_first_name) {
-        return;
+        return null;
     }
+
 
     boolean validateInput() {
 
@@ -94,7 +95,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.profile_fragment);
         Button editbutton = (Button) findViewById(R.id.linear_edit);
         Button btnShare = (Button) findViewById(R.id.btnShare);
 
@@ -112,8 +112,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void setContentView(int profile_fragment) {
-    }
+
 }
 // ignore these
         /*TextView profile_txt = view.findViewById(R.id.profile_txt);
