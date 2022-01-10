@@ -69,13 +69,15 @@ public class ProfileFragment extends Fragment {
         inputName.setText(registerName);
 
         btnSave = view.findViewById(R.id.btn_save);
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(inputEmail.getText().toString()).matches()) {
+            inputEmail.setError(getResources().getString(R.string.invalid_email));
+            btnSave.setEnabled(false);
+        }
+
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!Patterns.EMAIL_ADDRESS.matcher(inputEmail.getText().toString()).matches()) {
-                    inputEmail.setError(getResources().getString(R.string.invalid_email));
-                    btnSave.setEnabled(false);
-                }else{
 
                     String checkEmail = inputEmail.getText().toString();
                     String checkName = inputName.getText().toString();
@@ -86,7 +88,7 @@ public class ProfileFragment extends Fragment {
                     editor.putString("registerEmail", checkEmail);
                     editor.putString("registerName", checkName);
                     editor.commit();
-                }
+
             }
         });
 
