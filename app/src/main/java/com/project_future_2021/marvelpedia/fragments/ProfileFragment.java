@@ -46,18 +46,28 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view,@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        viewInitializations();
+        viewInitializations(view);
     }
 
-    void viewInitializations() {
-        firstname = findViewById(R.id.linear_first_name);
-        email = findViewById(R.id.linear_email);
-        lastname = findViewById(R.id.linear_last_name);
-        marvelname = findViewById(R.id.linear_marvel_name);
-    }
+    void viewInitializations(View view) {
+        firstname = view.findViewById(R.id.linear_first_name_value);
+        email = view.findViewById(R.id.linear_email_value);
+        marvelname = view.findViewById(R.id.linear_marvel_name_value);
+        editbutton = view.findViewById(R.id.linear_edit);
+        btnShare =  view.findViewById(R.id.btnShare);
 
-    private TextInputEditText findViewById(int linear_first_name) {
-        return null;
+        editbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(requireActivity(), "Edit", Toast.LENGTH_LONG).show();
+            }
+        });
+        btnShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(requireActivity(), "Share", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 
@@ -71,10 +81,7 @@ public class ProfileFragment extends Fragment {
             email.setError("Please Enter Email");
             return false;
         }
-        if (lastname.getText().toString().equals("")) {
-            lastname.setError("Please Enter Last Name");
-            return false;
-        }
+
         if (marvelname.getText().toString().equals("")) {
             marvelname.setError("Please Enter Marvel Name");
             return false;
@@ -85,31 +92,14 @@ public class ProfileFragment extends Fragment {
             return false;
         }
         return true;
+
     }
 
     boolean isemailValid(String email) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        editbutton = (Button) findViewById(R.id.linear_edit);
-        btnShare = (Button) findViewById(R.id.btnShare);
 
-        editbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(this, "Edit", Toast.LENGTH_LONG).show();
-            }
-        });
-        btnShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(this, "Share", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
 
 
 }
