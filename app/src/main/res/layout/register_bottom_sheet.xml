@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:paddingLeft="@dimen/default_padding"
-    android:paddingRight="@dimen/default_padding">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:id="@+id/register_main"
@@ -15,6 +10,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
         android:text="Time to register"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:textColor="@color/red_500"
         android:textSize="25sp" />
 
@@ -23,6 +21,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter an Email address"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_main"
         android:layout_marginTop="40dp"
         app:boxBackgroundColor="@color/white"
         app:boxCornerRadiusBottomEnd="4dp"
@@ -44,6 +45,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_padding"
         android:hint="Enter a Name"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_email"
         app:boxBackgroundColor="@color/white"
         app:boxCornerRadiusBottomEnd="4dp"
         app:boxCornerRadiusBottomStart="4dp"
@@ -64,6 +68,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_padding"
         android:hint="Enter a Username"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/register_name"
         app:boxBackgroundColor="@color/white"
         app:boxCornerRadiusBottomEnd="4dp"
         app:boxCornerRadiusBottomStart="4dp"
@@ -84,11 +91,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_padding"
         android:hint="Enter a Password"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/register_username"
         app:boxBackgroundColor="@color/white"
         app:boxCornerRadiusBottomEnd="4dp"
         app:boxCornerRadiusBottomStart="4dp"
         app:boxCornerRadiusTopEnd="4dp"
-        app:boxCornerRadiusTopStart="4dp">
+        app:boxCornerRadiusTopStart="4dp"
+        app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/register_password_value"
@@ -104,11 +115,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_padding"
         android:hint="Confirm Password"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/register_password"
         app:boxBackgroundColor="@color/white"
         app:boxCornerRadiusBottomEnd="4dp"
         app:boxCornerRadiusBottomStart="4dp"
         app:boxCornerRadiusTopEnd="4dp"
-        app:boxCornerRadiusTopStart="4dp">
+        app:boxCornerRadiusTopStart="4dp"
+        app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/confirm_password_value"
@@ -123,9 +138,11 @@
         android:id="@+id/register_button"
         app:layout_constraintTop_toBottomOf="@id/confirm_password"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         android:layout_margin="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Register" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

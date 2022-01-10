@@ -67,6 +67,7 @@ public class RegisterBottomSheetFragment extends BottomSheetDialogFragment {
                 editor.putString("registerUsername", checkUsername);
                 editor.putString("registerEmail", checkEmail);
                 editor.putString("registerPassword", checkFirstPassword);
+                editor.putString("registerName", checkName);
                 editor.commit();
 
 
