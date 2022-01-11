@@ -24,16 +24,14 @@ public class MyListAdapter
         extends ListAdapter<Hero, MyListAdapter.MyViewHolder> {
 
     private static final String TAG = "MyListAdapter";
-    private final List<Hero> myTestAdapterHeroesList;
+    private final List<Hero> myAdapterHeroesList;
     private final myClickListener myClickListener;
     private int lastPosition = -1;
-    //private HeroRoomDatabase database;
 
-    public MyListAdapter(@NonNull DiffUtil.ItemCallback<Hero> diffCallback, List<Hero> myTestAdapterHeroesList/*, Context context*/, myClickListener myClickListener) {
+    public MyListAdapter(@NonNull DiffUtil.ItemCallback<Hero> diffCallback, List<Hero> myAdapterHeroesList, myClickListener myClickListener) {
         super(diffCallback);
-        this.myTestAdapterHeroesList = myTestAdapterHeroesList;
+        this.myAdapterHeroesList = myAdapterHeroesList;
         this.myClickListener = myClickListener;
-        //database = Room.databaseBuilder(context, HeroRoomDatabase.class, "Marvelpedia").build();
     }
 
     @NonNull
@@ -45,7 +43,7 @@ public class MyListAdapter
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.bind(getItem(position));
+        holder.bind(getItem(position), position);
 
         // TODO: do we want or not to have animation on the RecyclerView?
         //holder.setAnimation(holder.itemView, position);
@@ -61,6 +59,8 @@ public class MyListAdapter
 
     public interface myClickListener {
         void onClick(View v, Hero data);
+
+        void onFavoritePressed(View v, Hero data, int position);
     }
 
     public static class HeroDiff extends DiffUtil.ItemCallback<Hero> {
@@ -105,7 +105,7 @@ public class MyListAdapter
             itemView.getRootView().clearAnimation();
         }
 
-        public void bind(Hero data) {
+        public void bind(Hero data, int position) {
             TextView hero_name = itemView.findViewById(R.id.sharedTextViewHeroName);
             TextView hero_description = itemView.findViewById(R.id.sharedTextViewHeroDescription);
             ImageView hero_thumbnail = itemView.findViewById(R.id.sharedImageViewHeroThumbnail);
@@ -142,40 +142,24 @@ public class MyListAdapter
                         .into(hero_thumbnail);
             }*/
 
+            // Set up 2 click listeners for each item.
+            // 1st case is when users click on 'favorites' icon
+            // 2nd case is when users click anywhere else.
 
+            // 1/2 click events
+            hero_favorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    myClickListener.onFavoritePressed(v, data, position);
+                    // TODO here or in the Fragment?
+                    //notifyItemChanged(position);
+                }
+            });
+            // 2/2 click events
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     myClickListener.onClick(v, data);
-                }
-            });
-
-            /*ArrayList<Hero> temp_hero_list = new ArrayList<Hero>();
-            temp_hero_list.add(data);*/
-            // handle the user clicking on the 'favorite' icon.
-            hero_favorite.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (data.getFavorite()) {
-                        data.setFavorite(false);
-                        /*new AsyncInsertToDb(database, new AsyncInsertToDb.Listener() {
-                            @Override
-                            public void onResult(boolean result) {
-
-                            }
-                        }).execute(temp_hero_list);*/
-                        hero_favorite.setImageResource(R.drawable.ic_no_favorite);
-                    } else {
-                        data.setFavorite(true);
-                        /*new AsyncInsertToDb(database, new AsyncInsertToDb.Listener() {
-                            @Override
-                            public void onResult(boolean result) {
-
-                            }
-                        }).execute(temp_hero_list);*/
-                        hero_favorite.setImageResource(R.drawable.ic_yes_favorite);
-                    }
-                    notifyItemChanged(getPosition());
                 }
             });
 

@@ -138,8 +138,6 @@ public class Hero implements Parcelable {
         this.name = name;
         this.description = description;
         this.isFavorite = isFavorite;
-        //TODO was added during debug, should probably remove later..
-        this.thumbnail = new Image("emptyPath", "emptyExtension");
     }
 
     public Hero(Integer id, String name, String description, Image thumbnail, Boolean isFavorite) {
@@ -290,12 +288,34 @@ public class Hero implements Parcelable {
                 '}';
     }
 
+    public static Hero copyHero(Hero inputHero) {
+        Hero copiedHero = new Hero();
+
+        copiedHero.setId(inputHero.getId());
+        copiedHero.setId(inputHero.getId());
+        copiedHero.setName(inputHero.getName());
+        copiedHero.setDescription(inputHero.getDescription());
+        copiedHero.setModified(inputHero.getModified());
+        copiedHero.setThumbnail(inputHero.getThumbnail());
+        copiedHero.setResourceURI(inputHero.getResourceURI());
+        copiedHero.setComics(inputHero.getComics());
+        copiedHero.setSeries(inputHero.getSeries());
+        copiedHero.setStories(inputHero.getStories());
+        copiedHero.setEvents(inputHero.getEvents());
+        copiedHero.setUrls(inputHero.getUrls());
+        copiedHero.setFavorite(inputHero.getFavorite());
+
+        return copiedHero;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Hero hero = (Hero) o;
-        return id.equals(hero.id) && name.equals(hero.name) && modified.equals(hero.modified);
+        //return id.equals(hero.id) && name.equals(hero.name);
+        // super-duper important to check for isFavorite comparison too, or else the UI does not update properly.
+        return id.equals(hero.id) && name.equals(hero.name) && isFavorite.equals(hero.isFavorite);
     }
 
     @Override

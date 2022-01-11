@@ -32,5 +32,6 @@
     <string name="base_url">https://gateway.marvel.com</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="forgot_pass_button">Forgot my Password</string>
+    <string name="favorites_default_text">Tap on the heart icon of your favorite Heroes, to appear here!</string>
     <string name="edit">edit</string>
 </resources>
