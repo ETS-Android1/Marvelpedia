@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.project_future_2021.marvelpedia.MainActivity;
 import com.project_future_2021.marvelpedia.R;
 
@@ -28,6 +29,9 @@ public class RegistrationBottomSheetFragment extends BottomSheetDialogFragment {
     private TextInputEditText registerUsername;
     private TextInputEditText registerPassword;
     private TextInputEditText confirmPassword;
+    private TextInputLayout emailValue;
+    private TextInputLayout passwordValue;
+    private TextInputLayout confirmValue;
 
     private String checkEmail;
     private String checkName;
@@ -58,6 +62,9 @@ public class RegistrationBottomSheetFragment extends BottomSheetDialogFragment {
         registerUsername = view.findViewById(R.id.register_username_value);
         registerPassword = view.findViewById(R.id.register_password_value);
         confirmPassword = view.findViewById(R.id.confirm_password_value);
+        emailValue = view.findViewById(R.id.register_email);
+        passwordValue = view.findViewById(R.id.register_password);
+        confirmValue = view.findViewById(R.id.confirm_password);
 
         btnRegister = view.findViewById(R.id.register_button);
         setupButtonRegister();
@@ -91,16 +98,19 @@ public class RegistrationBottomSheetFragment extends BottomSheetDialogFragment {
             return false;
         } else {
             if (!Patterns.EMAIL_ADDRESS.matcher(checkEmail).matches()) {
-                registerEmail.setError(getResources().getString(R.string.invalid_email));
+                emailValue.setError(getResources().getString(R.string.invalid_email));
+                registerEmail.requestFocus();
                 return false;
             } else if (checkFirstPassword.length() < 6) {
-                registerPassword.setError(getResources().getString(R.string.invalid_password));
+                passwordValue.setError(getResources().getString(R.string.invalid_password));
+                registerPassword.requestFocus();
                 return false;
             } else if (checkFirstPassword.equals(checkSecondPassword)) {
                 return true;
             } else {
-                registerPassword.setError(getResources().getString(R.string.password_match));
-                confirmPassword.setError(getResources().getString(R.string.password_match));
+                passwordValue.setError(getResources().getString(R.string.password_match));
+                confirmValue.setError(getResources().getString(R.string.password_match));
+                registerPassword.requestFocus();
                 return false;
             }
         }
