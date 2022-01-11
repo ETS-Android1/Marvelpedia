@@ -246,9 +246,8 @@ public class DetailsFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        //make the bottom navigation bar visible again
+        // Make the bottom navigation bar visible again.
         requireActivity().findViewById(R.id.main_btm_nav_view).setVisibility(View.VISIBLE);
-        Log.d(TAG, "onDestroyView: ");
         super.onDestroyView();
     }
 }

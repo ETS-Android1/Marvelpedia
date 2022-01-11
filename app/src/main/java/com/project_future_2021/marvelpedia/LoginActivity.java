@@ -8,30 +8,42 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.project_future_2021.marvelpedia.fragments.RegisterBottomSheetFragment;
+import com.project_future_2021.marvelpedia.fragments.RegistrationBottomSheetFragment;
 
 public class LoginActivity extends AppCompatActivity {
 
-    boolean isValid = false;
-    private Button button;
-    private Button regButton;
-    private TextInputEditText username;
-    private TextInputEditText password;
+    private static final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+    }
 
-        username = findViewById(R.id.login_username_value);
-        password = findViewById(R.id.login_password_value);
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
 
-        //Actions that happen when the "Let's go" button is pressed
-        button = findViewById(R.id.login_button);
-        button.setOnClickListener(new View.OnClickListener() {
+        initViews();
+    }
+
+
+    private void initViews() {
+        setupLoginButton();
+        setupRegisterButton();
+    }
+
+    private void setupLoginButton() {
+        TextInputEditText username = findViewById(R.id.login_username_value);
+        TextInputEditText password = findViewById(R.id.login_password_value);
+
+        // Actions that happen when the "Let's go" button is pressed.
+        Button btnLogin = findViewById(R.id.login_button);
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -39,66 +51,50 @@ public class LoginActivity extends AppCompatActivity {
                 String inputPassword = password.getText().toString();
 
                 if (inputUsername.isEmpty() || inputPassword.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Info are missing", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Credentials missing", Toast.LENGTH_SHORT).show();
                 } else {
-
                     //Validation method is called
-                    isValid = validate(inputUsername, inputPassword);
-
+                    boolean isValid = validate(inputUsername, inputPassword);
+                    // If validation process failed, just let the Users know.
                     if (!isValid) {
-
                         Toast.makeText(LoginActivity.this, "Incorrect Credentials", Toast.LENGTH_SHORT).show();
-
-                    } else {
-
-                        Toast.makeText(LoginActivity.this, "Login is successful", Toast.LENGTH_SHORT).show();
-
-                        openMainActivity();
-
-
                     }
-
+                    // If it was successful, navigate them to the MainActivity.
+                    else {
+                        Toast.makeText(LoginActivity.this, "Login is successful", Toast.LENGTH_SHORT).show();
+                        openMainActivity();
+                    }
                 }
-
-
             }
         });
-
-        //Bottom Sheet fragment of registration is called
-        regButton = findViewById(R.id.register_account);
-        regButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RegisterBottomSheetFragment bottomSheet = new RegisterBottomSheetFragment();
-                bottomSheet.show(getSupportFragmentManager(),
-                        "ModalBottomSheet");
-            }
-        });
-
     }
 
-    //Calls main activity
+    private void setupRegisterButton() {
+        // Bottom Sheet fragment of registration is called
+        Button btnRegister = findViewById(R.id.register_account);
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RegistrationBottomSheetFragment bottomSheetFragment = new RegistrationBottomSheetFragment();
+                bottomSheetFragment.show(getSupportFragmentManager(), "RegisterBottomSheetFragment");
+            }
+        });
+    }
+
+    // Calls main activity and closes this one (LoginActivity).
     public void openMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
-
-
     }
 
-    //Validates data
+    // Validates the credentials the Users give.
     private boolean validate(String inputUsername, String inputPassword) {
-
         SharedPreferences sp = getApplicationContext().getSharedPreferences("RegisterPrefs", Context.MODE_PRIVATE);
-        String registerUsername = sp.getString("registerUsername","");
-        String registerEmail = sp.getString("registerEmail","");
-        String registerPassword = sp.getString("registerPassword","");
+        String registerUsername = sp.getString("registerUsername", "");
+        String registerEmail = sp.getString("registerEmail", "");
+        String registerPassword = sp.getString("registerPassword", "");
 
-
-        if((inputUsername.equals(registerUsername) || inputUsername.equals(registerEmail))&& inputPassword.equals(registerPassword)){
-            return true;
-        }
-            return false;
-
+        return (inputUsername.equalsIgnoreCase(registerUsername) || inputUsername.equalsIgnoreCase(registerEmail)) && inputPassword.equals(registerPassword);
     }
 }
