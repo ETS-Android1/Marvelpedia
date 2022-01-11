@@ -272,8 +272,9 @@ public class Hero implements Parcelable {
 
     @Override
     public String toString() {
-        return "Hero{" +
-                "id=" + id +
+        /*return "Hero{" +
+                "isFavorite=" + isFavorite +
+                ", id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", modified='" + modified + '\'' +
@@ -284,8 +285,22 @@ public class Hero implements Parcelable {
                 ", stories=" + stories +
                 ", events=" + events +
                 ", urls=" + urls +
-                ", isFavorite=" + isFavorite +
-                '}';
+
+                '}';*/
+
+        return "Hero{" +
+                "isFavorite=" + isFavorite +
+                ", id=" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + "}";
+    }
+
+    public String toListStringDebug() {
+        return "Hero{" +
+                "isFavorite=" + isFavorite +
+                ", id=" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + "}";
     }
 
     public static Hero copyHero(Hero inputHero) {

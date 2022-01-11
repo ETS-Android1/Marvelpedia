@@ -1,5 +1,6 @@
 package com.project_future_2021.marvelpedia.recycler_view;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,12 @@ public class MyListAdapter
         void onClick(View v, Hero data);
 
         void onFavoritePressed(View v, Hero data, int position);
+    }
+
+    // Get the Hero at this position, used in FavoritesFragment
+    // by our ItemTouchHelper (swipe items left/right).
+    public Hero getHeroAt(int position) {
+        return getItem(position);
     }
 
     public static class HeroDiff extends DiffUtil.ItemCallback<Hero> {
@@ -150,16 +157,24 @@ public class MyListAdapter
             hero_favorite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    myClickListener.onFavoritePressed(v, data, position);
-                    // TODO here or in the Fragment?
-                    //notifyItemChanged(position);
+                    if (position != RecyclerView.NO_POSITION) {
+                        myClickListener.onFavoritePressed(v, data, position);
+                        // TODO here or in the Fragment?
+                        //notifyItemChanged(position);
+                    } else {
+                        Log.d(TAG, "favorite-onClick: something bad was about to happen");
+                    }
                 }
             });
             // 2/2 click events
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    myClickListener.onClick(v, data);
+                    if (position != RecyclerView.NO_POSITION) {
+                        myClickListener.onClick(v, data);
+                    } else {
+                        Log.d(TAG, "simple-onClick: something bad was about to happen");
+                    }
                 }
             });
 

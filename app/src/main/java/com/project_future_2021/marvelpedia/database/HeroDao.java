@@ -46,6 +46,9 @@ public interface HeroDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     int updateHero(Hero hero);
 
+    @Query("DELETE FROM heroes_table WHERE id=(:heroId) ")
+    void deleteHeroWithId(int heroId);
+
     @Query("DELETE FROM heroes_table")
     void deleteAllHeroes();
 }
