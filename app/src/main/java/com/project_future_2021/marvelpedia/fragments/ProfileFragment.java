@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.transition.MaterialFadeThrough;
 import com.project_future_2021.marvelpedia.R;
 import com.project_future_2021.marvelpedia.viewmodels.ProfileViewModel;
 
@@ -34,7 +35,6 @@ public class ProfileFragment extends Fragment {
     private TextInputEditText email;
     private TextInputEditText marvelname;
     private Button btnShare;
-    private Bundle savedInstanceState;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
