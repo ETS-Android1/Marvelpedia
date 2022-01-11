@@ -1,8 +1,10 @@
 package com.project_future_2021.marvelpedia.fragments;
 
 import android.content.Context;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.content.SharedPreferences;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.project_future_2021.marvelpedia.R;
 import com.project_future_2021.marvelpedia.viewmodels.ProfileViewModel;
+
+import java.text.BreakIterator;
+import java.text.StringCharacterIterator;
 
 public class ProfileFragment extends Fragment {
 
@@ -56,6 +61,19 @@ public class ProfileFragment extends Fragment {
         email = view.findViewById(R.id.linear_email_value);
         marvelname = view.findViewById(R.id.linear_marvel_name_value);
         editbutton = view.findViewById(R.id.linear_edit);
+
+        SharedPreferences preferences = requireActivity().getSharedPreferences("RegisterPrefs", Context.MODE_PRIVATE);
+        String registerUsername = marvelname.getText().toString();
+        String registerEmail = email.getText().toString();
+        String registerName = firstname.getText().toString();
+
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putString(registerEmail, registerEmail);
+        editor.putString(registerUsername, registerUsername);
+        editor.putString(registerName, registerName);
+
+
         btnShare =  view.findViewById(R.id.btnShare);
 
         editbutton.setOnClickListener(new View.OnClickListener() {
