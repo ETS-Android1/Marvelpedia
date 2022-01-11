@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.project_future_2021.marvelpedia.R;
 import com.project_future_2021.marvelpedia.data.Hero;
 import com.project_future_2021.marvelpedia.repositories.HeroRepository;
+import com.project_future_2021.marvelpedia.singletons.VolleySingleton;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -124,6 +125,10 @@ public class HeroesViewModel extends AndroidViewModel {
         heroRepository.update(copyOfInputHero);
     }
 
+    public void deleteHeroWithId(int heroId) {
+        heroRepository.deleteHeroWithId(heroId);
+    }
+
     public void deleteAllHeroes() {
         heroRepository.deleteAllHeroes();
     }
@@ -176,6 +181,16 @@ public class HeroesViewModel extends AndroidViewModel {
             return String.format("%032x", new BigInteger(1, md5.digest()));
         } else {
             return "";
+        }
+    }
+
+    public boolean cancelRequestWithTag(String requestTag) {
+        if (VolleySingleton.getInstance(getApplication().getBaseContext()) != null) {
+            VolleySingleton.getInstance(getApplication().getBaseContext()).getRequestQueue().cancelAll(requestTag);
+            heroRepository.stopLoading();
+            return true;
+        } else {
+            return false;
         }
     }
 }

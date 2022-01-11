@@ -31,7 +31,13 @@
         android:id="@+id/searchFragment"
         android:name="com.project_future_2021.marvelpedia.fragments.SearchFragment"
         android:label="Search For Your Hero"
-        tools:layout="@layout/search_fragment" />
+        tools:layout="@layout/search_fragment">
+        <action
+            android:id="@+id/action_searchFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment"
+            app:popUpTo="@id/searchFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.project_future_2021.marvelpedia.fragments.ProfileFragment"

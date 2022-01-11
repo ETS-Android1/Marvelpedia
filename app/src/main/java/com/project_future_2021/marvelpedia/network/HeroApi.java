@@ -8,13 +8,11 @@ import java.util.List;
 
 public class HeroApi {
 
-
     public interface TalkWithServer {
         List<Hero> getHeroesFromServer(Context context, String url, String requestTag, int offset, int limit);
 
         List<Hero> getHeroesFromServerWithName(Context context, String url, String requestTag, String heroName);
 
-        void test();
     }
 
 }

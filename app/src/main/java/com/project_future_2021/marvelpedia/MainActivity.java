@@ -14,7 +14,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-//action view, για να κανεις Share με Implicit Intent στα social media.
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
@@ -30,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
 
         initBottomNavigation();
-
     }
 
 
@@ -41,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.heroesFragment, R.id.favoritesFragment, R.id.searchFragment, R.id.profileFragment/*, R.id.loginFragment*//*, R.id.detailsFragment*/)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.fragmentContainerView);
+        NavController navController = Navigation.findNavController(this, R.id.main_fragment_container_view);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(btm_nav_view, navController);
 
@@ -54,14 +52,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // to handle what happens when the user presses the back 'arrow' of the toolbar/actionbar
+    // We want to handle what happens when the user presses the back 'arrow' of the toolbar/actionbar
     /*Attempts to navigate up in the navigation hierarchy.
     Suitable for when the user presses the "Up" button
     marked with a left (or start)-facing arrow in the upper left (or starting) corner of the app UI.*/
     @Override
     public boolean onSupportNavigateUp() {
         Log.d(TAG, "onSupportNavigateUp: ");
-        NavController navController = Navigation.findNavController(this, R.id.fragmentContainerView);
+        NavController navController = Navigation.findNavController(this, R.id.main_fragment_container_view);
         // navigateUp OR if that fails, call the super()
         return navController.navigateUp() || super.onNavigateUp();
     }
