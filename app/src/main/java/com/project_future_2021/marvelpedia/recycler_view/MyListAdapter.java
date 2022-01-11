@@ -74,14 +74,15 @@ public class MyListAdapter
         @Override
         public boolean areItemsTheSame(@NonNull Hero oldItem,
                                        @NonNull Hero newItem) {
-            //return oldItem.getId() == newItem.getId();
             return oldItem.getId().equals(newItem.getId());
+            //return oldItem == newItem;
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull Hero oldItem,
                                           @NonNull Hero newItem) {
             return oldItem.equals(newItem);
+            //return oldItem.equalsContent(newItem);
         }
     }
 

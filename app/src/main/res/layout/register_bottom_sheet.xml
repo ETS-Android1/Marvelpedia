@@ -65,11 +65,11 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/register_username"
+        android:id="@+id/register_marvelname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_padding"
-        android:hint="Enter a Username"
+        android:hint="Enter a Marvelname"
         app:boxBackgroundColor="@color/white"
         app:boxCornerRadiusBottomEnd="4dp"
         app:boxCornerRadiusBottomStart="4dp"
@@ -103,6 +103,7 @@
         app:layout_constraintTop_toBottomOf="@id/register_username"
         app:endIconMode="password_toggle"
         app:errorIconDrawable="@null">
+        app:layout_constraintTop_toBottomOf="@id/register_marvelname">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/register_password_value"

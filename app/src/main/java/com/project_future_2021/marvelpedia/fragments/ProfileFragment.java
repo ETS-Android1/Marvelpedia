@@ -1,6 +1,7 @@
 package com.project_future_2021.marvelpedia.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -50,10 +51,10 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        viewInitializations(view);
+        initViews(view);
     }
 
-    private void viewInitializations(View view) {
+    private void initViews(View view) {
 
         profileUserName = view.findViewById(R.id.profile_username_value);
         profileFirstName = view.findViewById(R.id.profile_first_name_value);
@@ -63,7 +64,6 @@ public class ProfileFragment extends Fragment {
         btnSave = view.findViewById(R.id.profile_button_save);
         btnShare = view.findViewById(R.id.profile_button_share);
 
-
         SharedPreferences sp = requireActivity().getSharedPreferences("RegisterPrefs", Context.MODE_PRIVATE);
 
         String registerUsername = sp.getString("registerUsername", "");
@@ -71,17 +71,10 @@ public class ProfileFragment extends Fragment {
         String registerPassword = sp.getString("registerPassword", "");
         String registerEmail = sp.getString("registerEmail", "");
 
-
         profileUserName.setText(registerUsername);
         profileFirstName.setText(registerName);
         profilePassword.setText(registerPassword);
         profileEmail.setText(registerEmail);
-
-        /*if (!Patterns.EMAIL_ADDRESS.matcher(inputEmail.getText().toString()).matches()) {
-            inputEmail.setError(getResources().getString(R.string.invalid_email));
-            btnSave.setEnabled(false);
-        }*/
-
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,10 +97,21 @@ public class ProfileFragment extends Fragment {
                 closeKeyboard();
             }
         });
+
+        // What happens when users click this button?
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(requireActivity(), "Share", Toast.LENGTH_LONG).show();
+                Intent myIntent = new Intent(Intent.ACTION_SEND);
+                myIntent.setType("text/plain");
+                // The Title
+                String body = "Share app Marvelpedia";
+                // The description
+                String sub = "I am Playing with Marvelpedia and i am very excited. You can see it and download it at the link below. \uD83E\uDD29 ";
+                myIntent.putExtra(Intent.EXTRA_SUBJECT, body);
+                myIntent.putExtra(Intent.EXTRA_TEXT, sub);
+                // The Title of createChooser.
+                startActivity(Intent.createChooser(myIntent, "Share Marvelpedia"));
             }
         });
     }
@@ -139,7 +143,6 @@ public class ProfileFragment extends Fragment {
             return false;
         }
         return true;
-
     }
 
     private boolean isMailValid(String email) {

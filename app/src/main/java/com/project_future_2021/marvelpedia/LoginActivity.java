@@ -31,7 +31,6 @@ public class LoginActivity extends AppCompatActivity {
         initViews();
     }
 
-
     private void initViews() {
         setupLoginButton();
         setupRegisterButton();
@@ -95,6 +94,6 @@ public class LoginActivity extends AppCompatActivity {
         String registerEmail = sp.getString("registerEmail", "");
         String registerPassword = sp.getString("registerPassword", "");
 
-        return (inputUsername.equalsIgnoreCase(registerUsername) || inputUsername.equalsIgnoreCase(registerEmail)) && inputPassword.equals(registerPassword);
+        return (inputUsername.equalsIgnoreCase(registerUsername) || inputUsername.equals(registerEmail)) && inputPassword.equals(registerPassword);
     }
 }

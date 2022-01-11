@@ -333,6 +333,14 @@ public class Hero implements Parcelable {
         return id.equals(hero.id) && name.equals(hero.name) && isFavorite.equals(hero.isFavorite);
     }
 
+    public boolean equalContents(Object o) {
+        if (o instanceof Hero) {
+            Hero hero = (Hero) o;
+            return id.equals(hero.id) && name.equals(hero.name) && isFavorite.equals(hero.isFavorite);
+        }
+        return false;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, name, description, modified, thumbnail, resourceURI, comics, series, stories, events, urls, isFavorite);
