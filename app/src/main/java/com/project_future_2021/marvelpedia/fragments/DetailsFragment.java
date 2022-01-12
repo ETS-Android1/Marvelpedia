@@ -102,15 +102,15 @@ public class DetailsFragment extends Fragment {
         //make the bottom navigation bar invisible
         requireActivity().findViewById(R.id.main_btm_nav_view).setVisibility(View.GONE);
 
-        textView = view.findViewById(R.id.textView);
-        Button btnSwatch = view.findViewById(R.id.buttonSwatch);
+        /*textView = view.findViewById(R.id.textView);
+        Button btnSwatch = view.findViewById(R.id.buttonSwatch);*/
         constraintLayout = view.findViewById(R.id.details_base_layout);
-        btnSwatch.setOnClickListener(new View.OnClickListener() {
+        /*btnSwatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 nextSwatch(v);
             }
-        });
+        });*/
         //ImageView myImage = view.findViewById(R.id.detailsMyImage);
         //Bitmap bitmap = ((BitmapDrawable) myImage.getDrawable()).getBitmap();
         //Bitmap bitmap = ((BitmapDrawable) myImage.getDrawable()).getBitmap();

@@ -57,13 +57,13 @@ public class SearchFragment extends Fragment {
 
         initViews(view);
 
-        Button btnDelete = view.findViewById(R.id.search_button_delete);
+        /*Button btnDelete = view.findViewById(R.id.search_button_delete);
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 heroesViewModel.deleteAllHeroes();
             }
-        });
+        });*/
     }
 
     private void initViews(View view) {

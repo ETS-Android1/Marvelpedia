@@ -7,20 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".fragments.SearchFragment">
 
-    <Button
-        android:id="@+id/search_button_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="delete"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:orientation="vertical"
+        android:padding="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,13 +27,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:hint="i.e. Spider, SuperMan etc"
+        android:hint="@string/search_hint"
         android:imeOptions="actionSearch"
         android:inputType="text"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/search_recycler_view"
-        app:layout_constraintRight_toLeftOf="@id/search_button_search"
+        app:layout_constraintEnd_toStartOf="@+id/search_button_search"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,8 +47,6 @@
         android:textColor="#F6EAEA"
         app:layout_constraintBottom_toBottomOf="@+id/search_edit_text_user_input"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/search_edit_text_user_input"
         app:layout_constraintTop_toTopOf="@+id/search_edit_text_user_input" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
