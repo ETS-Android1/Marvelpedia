@@ -45,25 +45,6 @@ public class HeroesFragment extends Fragment {
         return inflater.inflate(R.layout.heroes_fragment, container, false);
     }
 
-    //https://material.io/develop/android/theming/motion
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        /*Transition animation = TransitionInflater.from(requireContext()).inflateTransition(
-                android.R.transition.move
-        );
-        setSharedElementEnterTransition(animation);
-        setSharedElementReturnTransition(animation);*/
-
-        /*Explode explode = new Explode();
-        requireActivity().getWindow().setExitTransition(explode);*/
-        /*setSharedElementReturnTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.change_image));
-        setExitTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.explode));*/
-
-        //MaterialFadeThrough exitTransition = new MaterialFadeThrough();
-    }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -121,7 +102,7 @@ public class HeroesFragment extends Fragment {
                 // Don't forget to update the Database too.
                 heroesViewModel.updateHero(heroSelected);
                 // TODO here or in the Adapter?
-                heroesAdapter.notifyItemChanged(position);
+                //heroesAdapter.notifyItemChanged(position);
             }
         });
         // That should -THEORETICALLY- scroll to the last position of the RecyclerView, but...

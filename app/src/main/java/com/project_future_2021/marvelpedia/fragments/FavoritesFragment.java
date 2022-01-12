@@ -98,7 +98,7 @@ public class FavoritesFragment extends Fragment {
                 heroSelected.setFavorite(false);
                 heroesViewModel.updateHero(heroSelected);
                 // TODO here or in the Adapter?
-                favoritesAdapter.notifyItemChanged(position);
+                //favoritesAdapter.notifyItemChanged(position);
             }
         });
         favoritesRecyclerView.setAdapter(favoritesAdapter);

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/register_base_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -28,10 +27,10 @@
         app:boxCornerRadiusBottomStart="4dp"
         app:boxCornerRadiusTopEnd="4dp"
         app:boxCornerRadiusTopStart="4dp"
+        app:errorIconDrawable="@null"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_main"
-        app:errorIconDrawable="@null">
+        app:layout_constraintTop_toBottomOf="@+id/register_main">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/register_email_value"
@@ -93,6 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_padding"
         android:hint="Enter a Password"
+        android:nextFocusDown="@id/confirm_password_value"
         app:boxBackgroundColor="@color/white"
         app:boxCornerRadiusBottomEnd="4dp"
         app:boxCornerRadiusBottomStart="4dp"
@@ -103,13 +103,13 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/register_marvelname">
-        app:layout_constraintTop_toBottomOf="@id/register_marvelname">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/register_password_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:nextFocusForward="@id/confirm_password_value" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -124,17 +124,18 @@
         app:boxCornerRadiusBottomStart="4dp"
         app:boxCornerRadiusTopEnd="4dp"
         app:boxCornerRadiusTopStart="4dp"
+        app:endIconMode="password_toggle"
+        app:errorIconDrawable="@null"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/register_password"
-        app:endIconMode="password_toggle"
-        app:errorIconDrawable="@null">
+        app:layout_constraintTop_toBottomOf="@id/register_password">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/confirm_password_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:nextFocusForward="@id/register_button" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -144,6 +145,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:nextFocusForward="@id/register_button"
         android:text="Register"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

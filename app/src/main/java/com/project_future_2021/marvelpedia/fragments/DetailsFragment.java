@@ -6,7 +6,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -138,12 +137,22 @@ public class DetailsFragment extends Fragment {
                                     darkMutedSwatch = palette.getDarkMutedSwatch();
 
 
+//here we set the background color
+                                    if (mutedSwatch != null) {
+                                        constraintLayout.setBackgroundColor(mutedSwatch.getRgb());
+                                        name_txt.setTextColor(mutedSwatch.getTitleTextColor());
+                                        details_txt.setTextColor(mutedSwatch.getTitleTextColor());
 
-                                          /*if (darkMutedSwatch != null) {
-                                              constraintLayout.setBackgroundColor(darkMutedSwatch.getRgb());
-                                              name_txt.setTextColor(darkMutedSwatch.getTitleTextColor());
-                                              details_txt.setTextColor(darkMutedSwatch.getTitleTextColor());
-                                          }*/
+                                        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+                                        if (actionBar != null) {
+                                            actionBar.setDisplayHomeAsUpEnabled(true);
+                                            //set color action bar
+                                            actionBar.setBackgroundDrawable(new ColorDrawable(manipulateColor(mutedSwatch.getRgb(), 0.62f)));
+
+                                            //set color status bar
+                                            requireActivity().getWindow().setStatusBarColor(manipulateColor(mutedSwatch.getRgb(), 0.32f));
+                                        }
+                                    }
                                 }
                             }
                         });

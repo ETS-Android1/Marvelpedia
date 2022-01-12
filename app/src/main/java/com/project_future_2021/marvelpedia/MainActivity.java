@@ -1,17 +1,22 @@
 package com.project_future_2021.marvelpedia;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +34,30 @@ public class MainActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
 
         initBottomNavigation();
+        //setupSplashScreen();
     }
+
+    /*private void setupSplashScreen() {
+        ConstraintLayout main_splash_layout = findViewById(R.id.main_splash_layout);
+        ConstraintLayout main_normal_layout = findViewById(R.id.main_normal_layout);
+
+        ImageView splash_image = findViewById(R.id.main_splash_image);
+        Glide.with(this)
+                .load(R.drawable.gif1)
+                .into(splash_image);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //splash_image.setVisibility(View.INVISIBLE);
+                main_splash_layout.setVisibility(View.INVISIBLE);
+                main_normal_layout.setVisibility(View.VISIBLE);
+            }
+        }, 2600);
+        //}, 1600);
+        //}, 3200);
+    }*/
 
 
     private void initBottomNavigation() {

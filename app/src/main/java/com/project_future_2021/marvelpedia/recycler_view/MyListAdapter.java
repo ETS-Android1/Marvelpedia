@@ -141,7 +141,7 @@ public class MyListAdapter
             //if (data.getThumbnail()!=null){
             Glide.with(itemView)
                     .load(data.getThumbnail().makeImageWithVariant("portrait_xlarge"))
-                    .placeholder(R.drawable.ic_baseline_image_search_24)
+                    .placeholder(R.drawable.ic_image_placeholder2)
                     .into(hero_thumbnail);
             //}
             /*else{
@@ -161,7 +161,7 @@ public class MyListAdapter
                     if (position != RecyclerView.NO_POSITION) {
                         myClickListener.onFavoritePressed(v, data, position);
                         // TODO here or in the Fragment?
-                        //notifyItemChanged(position);
+                        notifyItemChanged(position);
                     } else {
                         Log.d(TAG, "favorite-onClick: something bad was about to happen");
                     }

@@ -111,7 +111,7 @@ public class SearchFragment extends Fragment {
                     data.setFavorite(true);
                     heroesViewModel.insertHero(data);
                 }
-                searchAdapter.notifyItemChanged(position);
+                //searchAdapter.notifyItemChanged(position);
             }
         });
         searchRecyclerView.setAdapter(searchAdapter);

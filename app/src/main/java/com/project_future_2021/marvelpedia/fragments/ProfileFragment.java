@@ -8,6 +8,7 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.Toast;
@@ -36,6 +37,12 @@ public class ProfileFragment extends Fragment {
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requireActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     @Override
@@ -107,7 +114,7 @@ public class ProfileFragment extends Fragment {
                 // The Title
                 String body = "Share app Marvelpedia";
                 // The description
-                String sub = "I am Playing with Marvelpedia and i am very excited. You can see it and download it at the link below. \uD83E\uDD29 ";
+                String sub = "I am Playing with Marvelpedia and i am very excited. You can check it out and download it at the link below. \uD83E\uDD29 ";
                 myIntent.putExtra(Intent.EXTRA_SUBJECT, body);
                 myIntent.putExtra(Intent.EXTRA_TEXT, sub);
                 // The Title of createChooser.
