@@ -27,3 +27,10 @@ It uses:
 - Volley
 - GSON
 - and Glide.
+
+### *Some screenshots:*
+
+<img src="screenshots/login.jpg" alt="Login Screen" width="250" > <img src="screenshots/register.jpg" alt="Registration Screen" width="250" >
+
+<img src="screenshots/heroes.jpg" alt="All Heroes Screen" width="250" > <img src="screenshots/details.jpg" alt="Details for specific Hero Screen" width="250" >
+<img src="screenshots/favorites.jpg" alt="List of Favorite Heroes Screen" width="250" > <img src="screenshots/search.jpg" alt="Search for specific Hero Screen" width="250" > <img src="screenshots/profile.jpg" alt="Profile Screen" width="250" >
