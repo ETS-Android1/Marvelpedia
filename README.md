@@ -13,6 +13,17 @@ The app will allow the users to:
     more details about them will open.
 - Search for any Marvel Hero.
 - Edit/Change their profile page.
+- And last but not least, the app will function in offline mode too, if the users do not currently have a network connection!
 
 
 #### *And some more cool features to come!!..*
+
+The project is written 100% in Java and follows the MVVM architecture.
+It uses:
+- ViewModels
+- LiveData
+- Navigation component
+- Room
+- Volley
+- GSON
+- and Glide.
