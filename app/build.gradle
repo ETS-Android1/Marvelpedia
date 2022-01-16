@@ -17,6 +17,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField 'String', "PUBLIC_API_KEY", MARVELPEDIA_PUBLIC_API_KEY
+            buildConfigField 'String', "PRIVATE_API_KEY", MARVELPEDIA_PRIVATE_API_KEY
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

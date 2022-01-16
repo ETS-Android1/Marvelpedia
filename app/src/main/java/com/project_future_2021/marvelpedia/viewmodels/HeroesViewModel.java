@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.project_future_2021.marvelpedia.BuildConfig;
 import com.project_future_2021.marvelpedia.R;
 import com.project_future_2021.marvelpedia.data.Hero;
 import com.project_future_2021.marvelpedia.repositories.HeroRepository;
@@ -144,8 +145,8 @@ public class HeroesViewModel extends AndroidViewModel {
     public String createUrlForApiCall(String request_type) {
         String timestamp_now = getNow();
         String BASE_URL = getApplication().getString(R.string.base_url);
-        String PRIVATE_API_KEY = getApplication().getString(R.string.private_API_key);
-        String PUBLIC_API_KEY = getApplication().getString(R.string.public_API_key);
+        String PRIVATE_API_KEY = BuildConfig.PRIVATE_API_KEY;
+        String PUBLIC_API_KEY = BuildConfig.PUBLIC_API_KEY;
 
         String hashInput = timestamp_now + PRIVATE_API_KEY + PUBLIC_API_KEY;
         String hashResult = generateMD5HashFromString(hashInput);

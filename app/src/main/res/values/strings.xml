@@ -25,8 +25,6 @@
 
 
     <string name="search_hint">Hulk, Ant-man, Iron man etc…</string>
-    <string name="private_API_key">c08d8b1502acba654df4211f076ecee3bd56a380</string>
-    <string name="public_API_key">da311cab234d0c1a1134f345bc99fa2a</string>
     <string name="base_url">https://gateway.marvel.com</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="forgot_pass_button">Forgot my Password</string>
